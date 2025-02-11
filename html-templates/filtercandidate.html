@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Filter Candidate</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r121/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vanta/0.5.21/vanta.net.min.js"></script>
+    <style>
+        .card {
+            cursor: pointer;
+        }
+    </style>
+    <script>
+        function navigateToDetails(candidateName) {
+            // Redirect to CandidateDetails.html with candidate name as a query parameter
+            window.location.href = `CandidateDetails.html?candidate=${encodeURIComponent(candidateName)}`;
+        }
+
+        function stopPropagation(event) {
+            event.stopPropagation();
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            VANTA.NET({
+                el: "body",
+                mouseControls: true,
+                touchControls: true,
+                gyroControls: false,
+                minHeight: 200.00,
+                minWidth: 200.00,
+                scale: 1.00,
+                scaleMobile: 1.00,
+                color: 0x3b82f6, // Soft blue for the net color
+                backgroundColor: 0x1a1a1a, // Dark gray background
+                points: 20.00,
+                maxDistance: 24.00
+            });
+        });
+    </script>
+</head>
+<body class="bg-gray-900 text-gray-200 py-10">
+    <div id="vanta-bg" class="h-screen">
+        <div class="max-w-6xl mx-auto">
+            <h1 class="text-3xl font-bold mb-6 text-center">Candidate Details</h1>
+
+            <!-- Candidate Detail Cards -->
+            <form id="candidate-approval-form" method="POST" action="/save-approvals">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Card 1 -->
+                    <div class="card bg-gray-800 p-4 rounded-lg shadow-md" onclick="navigateToDetails('John Doe')">
+                        <h2 class="text-lg font-bold">John Doe</h2>
+                        <p class="text-sm text-gray-400 mt-2"><strong>Skills:</strong> JavaScript, Python, HTML</p>
+                        <p class="text-sm text-gray-400 mt-1"><strong>Experience:</strong> 3 years</p>
+                        <label class="mt-4 block text-sm font-medium text-gray-400">
+                            <input type="checkbox" name="approved[john-doe]" class="mr-2" onclick="stopPropagation(event)"> Approved
+                        </label>
+                    </div>
+
+                    <!-- Card 2 -->
+                    <div class="card bg-gray-800 p-4 rounded-lg shadow-md" onclick="navigateToDetails('Jane Smith')">
+                        <h2 class="text-lg font-bold">Jane Smith</h2>
+                        <p class="text-sm text-gray-400 mt-2"><strong>Skills:</strong> CSS, React, Node.js</p>
+                        <p class="text-sm text-gray-400 mt-1"><strong>Experience:</strong> 5 years</p>
+                        <label class="mt-4 block text-sm font-medium text-gray-400">
+                            <input type="checkbox" name="approved[jane-smith]" class="mr-2" onclick="stopPropagation(event)"> Approved
+                        </label>
+                    </div>
+
+                    <!-- Card 3 -->
+                    <div class="card bg-gray-800 p-4 rounded-lg shadow-md" onclick="navigateToDetails('Alice Johnson')">
+                        <h2 class="text-lg font-bold">Alice Johnson</h2>
+                        <p class="text-sm text-gray-400 mt-2"><strong>Skills:</strong> Java, SQL, Spring Boot</p>
+                        <p class="text-sm text-gray-400 mt-1"><strong>Experience:</strong> 4 years</p>
+                        <label class="mt-4 block text-sm font-medium text-gray-400">
+                            <input type="checkbox" name="approved[alice-johnson]" class="mr-2" onclick="stopPropagation(event)"> Approved
+                        </label>
+                    </div>
+
+                    <!-- Card 4 -->
+                    <div class="card bg-gray-800 p-4 rounded-lg shadow-md" onclick="navigateToDetails('Bob Williams')">
+                        <h2 class="text-lg font-bold">Bob Williams</h2>
+                        <p class="text-sm text-gray-400 mt-2"><strong>Skills:</strong> PHP, Laravel, MySQL</p>
+                        <p class="text-sm text-gray-400 mt-1"><strong>Experience:</strong> 6 years</p>
+                        <label class="mt-4 block text-sm font-medium text-gray-400">
+                            <input type="checkbox" name="approved[bob-williams]" class="mr-2" onclick="stopPropagation(event)"> Approved
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Submit Button -->
+                <div class="mt-6 text-right">
+                    <button type="submit" class="px-4 py-2 bg-blue-600 text-white font-bold rounded-md shadow hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-400">
+                        Save Approvals
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

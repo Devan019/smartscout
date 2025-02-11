@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Teams</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vanta/dist/vanta.net.min.js"></script>
+    <style>
+        body {
+            height: 100vh;
+            margin: 0;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-900 text-gray-200 relative">
+
+    <!-- Vanta Background -->
+    <div id="vanta-bg" class="absolute top-0 left-0 w-full h-full -z-10"></div>
+
+    <!-- Main Container -->
+    <div class="max-w-7xl mx-auto px-6 py-12 relative z-10">
+
+        <!-- Header -->
+        <div class="text-center mb-8">
+            <h1 class="text-4xl font-semibold">Manage Teams</h1>
+            <p class="mt-2 text-lg text-gray-400">View and manage your teams</p>
+        </div>
+
+        <!-- Search Bar -->
+        <div class="mb-6">
+            <input type="text" placeholder="Search teams..." class="w-full p-3 bg-gray-800 border border-gray-700 rounded-md text-gray-200 focus:ring focus:ring-blue-500" />
+        </div>
+
+        <!-- Assigned Teams List -->
+        <div class="bg-gray-800 p-6 rounded-lg shadow-md">
+            <h2 class="text-2xl font-semibold mb-4">Assigned Teams</h2>
+            <div id="teamsList" class="space-y-4">
+                <!-- Team 1 -->
+                <div class="bg-gray-700 p-4 rounded-md shadow-sm">
+                    <div class="flex justify-between items-center">
+                        <a href="page3.html?team=Team%20A" class="text-blue-400 text-lg font-semibold hover:underline">
+                            Team A
+                        </a>
+                        <span class="text-sm font-semibold px-3 py-1 rounded-full bg-green-100 text-green-800">
+                            Completed
+                        </span>
+                    </div>
+                    <div class="mt-2 text-gray-400 text-sm">
+                        <p><strong>Members:</strong> Alice, Bob, Charlie</p>
+                        <p><strong>Skills:</strong> React, Node.js, MongoDB</p>
+                    </div>
+                    <div class="mt-4 flex space-x-2">
+                        <button class="bg-yellow-500 text-white px-3 py-1 rounded-md hover:bg-yellow-600">Update</button>
+                        <button class="bg-red-500 text-white px-3 py-1 rounded-md hover:bg-red-600">Delete</button>
+                        <button class="bg-blue-500 text-white px-3 py-1 rounded-md hover:bg-blue-600">Mark as In Progress</button>
+                    </div>
+                </div>
+
+                <!-- Team 2 -->
+                <div class="bg-gray-700 p-4 rounded-md shadow-sm">
+                    <div class="flex justify-between items-center">
+                        <a href="page3.html?team=Team%20B" class="text-blue-400 text-lg font-semibold hover:underline">
+                            Team B
+                        </a>
+                        <span class="text-sm font-semibold px-3 py-1 rounded-full bg-yellow-100 text-yellow-800">
+                            In Progress
+                        </span>
+                    </div>
+                    <div class="mt-2 text-gray-400 text-sm">
+                        <p><strong>Members:</strong> David, Emma, Frank</p>
+                        <p><strong>Skills:</strong> Python, Flask, PostgreSQL</p>
+                    </div>
+                    <div class="mt-4 flex space-x-2">
+                        <button class="bg-yellow-500 text-white px-3 py-1 rounded-md hover:bg-yellow-600">Update</button>
+                        <button class="bg-red-500 text-white px-3 py-1 rounded-md hover:bg-red-600">Delete</button>
+                        <button class="bg-green-500 text-white px-3 py-1 rounded-md hover:bg-green-600">Mark as Completed</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Back Button Section -->
+        <div class="text-center mt-8">
+            <a href="assignproject.html" class="bg-blue-600 text-white px-6 py-3 rounded-md font-semibold hover:bg-blue-700">Back to Employee Assignment</a>
+        </div>
+
+    </div>
+
+    <!-- Vanta.js Initialization -->
+    <script>
+        VANTA.NET({
+            el: "#vanta-bg",
+            mouseControls: true,
+            touchControls: true,
+            gyroControls: false,
+            minHeight: 200.00,
+            minWidth: 200.00,
+            scale: 1.00,
+            scaleMobile: 1.00,
+            color: 0x3b82f6, // Soft blue for the net color
+            backgroundColor: 0x1a1a1a, // Dark gray background
+            points: 20.00,
+            maxDistance: 24.00
+        });
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,129 @@
+<script src="https://cdn.tailwindcss.com"></script>
+
+<div class="overflow-hidden bg-gray-900 min-h-screen">
+  <div class="px-4 py-16 mx-auto sm:max-w-xl md:max-w-full lg:max-w-screen-xl md:px-24 lg:px-8 lg:py-20">
+    <div class="flex flex-col items-center justify-between xl:flex-row-reverse">
+      <div class="w-full max-w-xl mb-12 xl:pr-16 xl:mb-0 xl:w-7/12">
+        <h2 class="max-w-lg mb-6 font-sans text-3xl font-bold tracking-tight text-white sm:text-4xl sm:leading-none">
+            Secure Login to Your Account <br class="hidden md:block" />
+            with Ease and Confidence
+          </h2>
+          <p class="max-w-xl mb-4 text-base text-gray-400 md:text-lg">
+            Access your personal dashboard, manage your preferences, and enjoy a seamless experience. Enter your credentials below to get started.
+          </p>
+          
+        <a href="/" aria-label="" class="text-gray-100 inline-flex items-center font-semibold tracking-wider transition-colors duration-200 text-teal-accent-400 hover:text-teal-accent-700">
+          Learn more
+          <svg class="inline-block w-3 ml-2" fill="white" viewBox="0 0 12 12">
+            <path d="M9.707,5.293l-5-5A1,1,0,0,0,3.293,1.707L7.586,6,3.293,10.293a1,1,0,1,0,1.414,1.414l5-5A1,1,0,0,0,9.707,5.293Z"></path>
+          </svg>
+        </a>
+      </div>
+      <div class="w-full max-w-xl xl:px-8 xl:w-5/12 ">
+        <div class="relative">
+          <svg viewBox="0 0 52 24" fill="white" class=" absolute bottom-0 right-0 z-0 hidden w-32 -mb-8 -mr-20 text-teal-accent-400 lg:w-32 lg:-mr-16 xl:block">
+            <defs>
+              <pattern id="766323e1-e594-4ffd-a688-e7275079d540" x="0" y="0" width=".135" height=".30">
+                <circle cx="1" cy="1" r=".7"></circle>
+              </pattern>
+            </defs>
+            <rect fill="url(#766323e1-e594-4ffd-a688-e7275079d540)" width="52" height="24"></rect>
+          </svg>
+          <div class=" bg-zinc-950 w-full  max-w-sm p-6 bg-white rounded-lg shadow-lg">
+            <h2 class="text-2xl font-semibold text-center text-gray-700 mb-6">Login</h2>
+    
+            <!-- Form with the handleLogin function to redirect on submit -->
+            <form onsubmit="handleLogin(event)" method="POST" class="space-y-4">
+                <!-- Email Field -->
+                <div>
+                    <label for="email" class="block text-sm font-medium text-gray-600">Email Address</label>
+                    <input type="email" id="email" name="email" required class="bg-transparent mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                </div>
+    
+                <!-- Password Field -->
+                <div>
+                    <label for="password" class="block text-sm font-medium text-gray-600">Password</label>
+                    <input type="password" id="password" name="password" required class="bg-transparent mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                </div>
+    
+                <!-- Designation Dropdown -->
+                <div class="flex flex-col space-y-2">
+                    <label for="desigoption" class="text-sm font-medium text-gray-700">
+                        Login as
+                    </label>
+                    <select name="desig" id="desigoption" onchange="toggleAdditionalFields()" class="bg-transparent text-white block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                        <option class="bg-zinc-950" value="employee">Employee</option>
+                        <option class="bg-zinc-950" value="manager">Manager</option>
+                        <option class="bg-zinc-950" value="admin">Admin</option>
+                    </select>
+                </div>
+    
+                <!-- Activation Code Field (Hidden by Default) -->
+                <div id="activation-code-field" class="hidden">
+                    <label for="activation-code" class="block text-sm font-medium text-gray-600">Activation Code</label>
+                    <input type="text" id="activation-code" name="activation_code" class="bg-transparent mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                </div>
+    
+                <!-- Admin Code Field (Hidden by Default) -->
+                <div id="admin-code-field" class="hidden">
+                    <label for="admin-code" class="block text-sm font-medium text-gray-600">Admin Code</label>
+                    <input type="text" id="admin-code" name="admin_code" class="bg-transparent mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                </div>
+    
+                <!-- Submit Button -->
+                <div>
+                    <button type="submit" class="w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        Log In
+                    </button>
+                </div>
+            </form>
+    
+            <div class="mt-4 text-center">
+                <a href="#" class="text-sm text-blue-500 hover:underline">Forgot your password?</a>
+            </div>
+    
+            <div class="mt-2 text-center">
+                <span class="text-sm text-gray-600">Don't have an account? <a href="#" class="text-blue-500 hover:underline">Sign up</a></span>
+            </div>
+        </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+    // Function to toggle additional fields based on the role selected
+    function toggleAdditionalFields() {
+        const designation = document.getElementById("desigoption").value;
+        const activationCodeField = document.getElementById("activation-code-field");
+        const adminCodeField = document.getElementById("admin-code-field");
+
+        // Show or hide fields based on designation selected
+        if (designation === "manager") {
+            activationCodeField.classList.remove("hidden");
+            adminCodeField.classList.add("hidden");
+        } else if (designation === "admin") {
+            adminCodeField.classList.remove("hidden");
+            activationCodeField.classList.add("hidden");
+        } else {
+            activationCodeField.classList.add("hidden");
+            adminCodeField.classList.add("hidden");
+        }
+    }
+
+    // Function to handle form submission and redirect to the respective dashboard
+    function handleLogin(event) {
+        event.preventDefault(); // Prevent default form submission
+        const selectedRole = document.getElementById("desigoption").value;
+
+        // Redirect based on the selected role
+        if (selectedRole === "employee") {
+            window.location.href = "employeeDashboard.html"; // Redirect to employee dashboard
+        } else if (selectedRole === "manager") {
+            window.location.href = "managerDashboard.html"; // Redirect to manager dashboard
+        } else if (selectedRole === "admin") {
+            window.location.href = "adminDashboard.html"; // Redirect to admin dashboard
+        }
+    }
+</script>

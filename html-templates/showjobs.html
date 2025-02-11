@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Show All Jobs</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vanta/dist/vanta.net.min.js"></script>
+    <style>
+        body {
+            color: #f3f4f6;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-900 py-10">
+    <div id="vanta-bg" class="absolute inset-0 -z-10"></div>
+
+    <div class="max-w-4xl mx-auto relative">
+        <h1 class="text-3xl font-bold mb-6 text-center">Job Listings</h1>
+
+        <!-- Job Card 1 -->
+        <div class="bg-gray-800 p-6 mb-4 rounded-lg shadow-md">
+            <h2 class="text-xl font-bold">Software Developer</h2>
+            <p><strong>Skills Required:</strong> JavaScript, HTML, CSS, React</p>
+            <p><strong>Expected Salary:</strong> $60,000</p>
+            <p><strong>Minimum Experience:</strong> 2 years</p>
+            <p><strong>Job Type:</strong> Full-Time</p>
+        </div>
+
+        <!-- Job Card 2 -->
+        <div class="bg-gray-800 p-6 mb-4 rounded-lg shadow-md">
+            <h2 class="text-xl font-bold">Data Analyst</h2>
+            <p><strong>Skills Required:</strong> Python, SQL, Excel</p>
+            <p><strong>Expected Salary:</strong> $50,000</p>
+            <p><strong>Minimum Experience:</strong> 1 year</p>
+            <p><strong>Job Type:</strong> Part-Time</p>
+        </div>
+
+        <!-- Job Card 3 -->
+        <div class="bg-gray-800 p-6 mb-4 rounded-lg shadow-md">
+            <h2 class="text-xl font-bold">UI/UX Designer</h2>
+            <p><strong>Skills Required:</strong> Figma, Sketch, Adobe XD</p>
+            <p><strong>Expected Salary:</strong> $55,000</p>
+            <p><strong>Minimum Experience:</strong> 3 years</p>
+            <p><strong>Job Type:</strong> Contract</p>
+        </div>
+    </div>
+
+    <script>
+        VANTA.NET({
+            el: "#vanta-bg",
+            mouseControls: true,
+            touchControls: true,
+            gyroControls: false,
+            minHeight: 200.00,
+            minWidth: 200.00,
+            scale: 1.0,
+            scaleMobile: 1.0,
+            color: 0x3b82f6, // Soft blue for the net color
+            backgroundColor: 0x1a1a1a,
+        });
+    </script>
+</body>
+
+</html>

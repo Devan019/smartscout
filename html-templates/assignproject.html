@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Assign Project to Employee</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/110/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vanta/0.5.24/vanta.net.min.js"></script>
+</head>
+
+<body class="bg-gray-900 text-gray-200 h-screen flex justify-center items-center">
+    <div class="flex flex-col max-w-7xl mx-auto px-6 py-12 w-full h-full">
+
+        <!-- Header -->
+        <div class="text-center mb-8">
+            <h1 class="text-4xl font-semibold text-gray-100">Assign Projects to Employees</h1>
+            <p class="mt-2 text-lg text-gray-400">Manager Dashboard to assign projects and create teams</p>
+        </div>
+
+        <div class="flex flex-col md:flex-row flex-grow gap-6">
+            <!-- Employee List Section -->
+            <div class="flex-grow bg-gray-800 p-6 rounded-lg shadow-md">
+                <h2 class="text-2xl font-semibold text-gray-100 mb-4">Select Employees</h2>
+
+                <!-- Search Input -->
+                <div class="mb-4">
+                    <input type="text" id="searchInput" placeholder="Search employees (e.g., name, skills)"
+                        class="p-3 w-full border border-gray-700 rounded-md bg-gray-700 text-gray-300" oninput="filterEmployees()">
+                </div>
+
+                <!-- Scrollable Employee List -->
+                <div class="h-64 overflow-y-auto border border-gray-700 rounded-md p-4" id="employeeList">
+                    <!-- Employee list will be dynamically generated here -->
+                </div>
+
+                <!-- Selected Employees Section -->
+                <div class="mt-6">
+                    <h3 class="text-xl font-semibold text-gray-100 mb-2">Selected Employees</h3>
+                    <ul id="selectedEmployees" class="space-y-2">
+                        <!-- Selected employees with details will appear here -->
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Project Assignment Section -->
+            <div class="flex-grow bg-gray-800 p-6 rounded-lg shadow-md">
+                <h2 class="text-2xl font-semibold text-gray-100 mb-4">Assign Project</h2>
+
+                <form id="projectForm">
+                    <div class="mb-4">
+                        <label for="projectName" class="block text-lg font-medium text-gray-300">Project Name</label>
+                        <input type="text" id="projectName" name="projectName"
+                            class="mt-2 p-3 w-full border border-gray-700 rounded-md bg-gray-700 text-gray-300"
+                            placeholder="Enter project name">
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="teamName" class="block text-lg font-medium text-gray-300">Team Name</label>
+                        <input type="text" id="teamName" name="teamName"
+                            class="mt-2 p-3 w-full border border-gray-700 rounded-md bg-gray-700 text-gray-300"
+                            placeholder="Enter team name">
+                    </div>
+
+                    <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-md font-semibold">Assign
+                        Project</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Assigned Teams List -->
+        <div class="bg-gray-800 mt-8 p-6 rounded-lg shadow-md">
+            <h2 class="text-2xl font-semibold text-gray-100 mb-4">Assigned Teams</h2>
+            <div id="teamsList" class="space-y-4">
+                <!-- Dynamically populated teams list will appear here -->
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        VANTA.NET({
+            el: "body",
+            mouseControls: true,
+            touchControls: true,
+            gyroControls: false,
+            minHeight: 200.00,
+            minWidth: 200.00,
+            scale: 1.00,
+            scaleMobile: 1.00,
+            color: 0x3b82f6, // Soft blue for the net color
+            backgroundColor: 0x1a1a1a, // Dark gray background
+            points: 20.00,
+            maxDistance: 24.00
+        });
+
+        // Sample employee data
+        const employees = [
+            { name: "John Doe", experience: "5 years", skills: "JavaScript, React" },
+            { name: "Jane Smith", experience: "3 years", skills: "Node.js, MongoDB" },
+            { name: "Alice Brown", experience: "4 years", skills: "HTML, CSS, Tailwind" },
+            { name: "Bob Johnson", experience: "2 years", skills: "Java, Spring Boot" },
+            { name: "Emily Davis", experience: "6 years", skills: "Python, Django" },
+            { name: "Michael Wilson", experience: "7 years", skills: "C++, Embedded Systems" },
+            { name: "Sarah Martinez", experience: "3 years", skills: "Angular, TypeScript" },
+            { name: "David Taylor", experience: "4 years", skills: "Kotlin, Android Development" },
+            { name: "Sophia Thomas", experience: "5 years", skills: "Ruby on Rails" },
+            { name: "Daniel White", experience: "6 years", skills: "PHP, Laravel" },
+            { name: "Olivia Lee", experience: "3 years", skills: "Flutter, Dart" },
+            { name: "James Harris", experience: "8 years", skills: "AWS, DevOps" },
+            { name: "Amelia Clark", experience: "2 years", skills: "UI/UX Design, Figma" },
+            { name: "Ethan Lewis", experience: "5 years", skills: "Swift, iOS Development" },
+            { name: "Charlotte Hall", experience: "4 years", skills: "Data Science, Machine Learning" },
+            { name: "Alexander Allen", experience: "6 years", skills: "GoLang, Microservices" },
+            { name: "Mia Young", experience: "3 years", skills: "SEO, Content Marketing" },
+            { name: "Lucas Wright", experience: "7 years", skills: "Cybersecurity, Ethical Hacking" },
+            { name: "Ella Scott", experience: "2 years", skills: "Digital Marketing, Analytics" },
+            { name: "Henry King", experience: "9 years", skills: "Blockchain, Smart Contracts" }
+        ];
+
+        // Generate employee list dynamically
+        const employeeList = document.getElementById("employeeList");
+
+        employees.forEach((employee, index) => {
+            const employeeItem = document.createElement("div");
+            employeeItem.className = "employee-item flex items-center space-x-4 text-gray-300";
+
+            employeeItem.innerHTML = `
+        <input type="checkbox" id="emp${index + 1}" name="employees" value="${employee.name}" class="h-4 w-4 text-blue-600 border-gray-700 rounded" onchange="updateSelectedEmployees()">
+        <label for="emp${index + 1}" class="">
+            <div class="font-semibold">${employee.name}</div>
+            <div class="text-sm text-gray-500">Experience: ${employee.experience}</div>
+            <div class="text-sm text-gray-500">Skills: ${employee.skills}</div>
+        </label>
+    `;
+
+            employeeList.appendChild(employeeItem);
+        });
+
+        // Filter employees by search input
+        function filterEmployees() {
+            const query = document.getElementById("searchInput").value.toLowerCase();
+            const employees = document.querySelectorAll(".employee-item");
+
+            employees.forEach(employee => {
+                const text = employee.textContent.toLowerCase();
+                employee.style.display = text.includes(query) ? "" : "none";
+            });
+        }
+
+        // Update selected employees
+        function updateSelectedEmployees() {
+            const selectedList = document.getElementById("selectedEmployees");
+            selectedList.innerHTML = "";
+
+            const checkboxes = document.querySelectorAll('input[name="employees"]:checked');
+            checkboxes.forEach(checkbox => {
+                const label = checkbox.nextElementSibling;
+                const name = label.querySelector(".font-semibold").textContent;
+                const experience = label.querySelector("div:nth-child(2)").textContent;
+                const skills = label.querySelector("div:nth-child(3)").textContent;
+
+                const li = document.createElement("li");
+                li.className = "p-3 bg-gray-700 rounded-md shadow-sm text-gray-200";
+                li.innerHTML = `<strong>${name}</strong><br><span>${experience}</span><br><span>${skills}</span>`;
+                selectedList.appendChild(li);
+            });
+        }
+    </script>
+</body>
+
+</html>
