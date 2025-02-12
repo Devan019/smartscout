@@ -9,7 +9,7 @@ class CustomUser(AbstractUser):
         ('employee', 'Employee'),
     )
     role = models.CharField(max_length=20, choices=ROLE_CHOICES, default='employee')
-    authCode = models.CharField(max_length=6,blank=True)
+    authCode = models.CharField(max_length=6,blank=True,default="",null=True)
 
     groups = models.ManyToManyField(
         "auth.Group",

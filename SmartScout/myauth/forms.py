@@ -10,8 +10,8 @@ ROLES = (
 class UserForm(UserCreationForm):
 
   email = forms.EmailField(max_length=100)
-  role = forms.ChoiceField(choices=ROLES)
-  authCode = forms.CharField(max_length=6)
+  role = forms.ChoiceField(choices=ROLES,required=False)
+  authCode = forms.CharField(max_length=6,required=False)
 
   class Meta:
     model = CustomUser

@@ -1,8 +1,9 @@
 
-from pyexpat.errors import messages
+from django.contrib import messages
 from django.shortcuts import redirect, render
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import authenticate,logout,login
+from .forms import UserForm,AuthForm
 
 # Create your views here.
 
@@ -10,13 +11,17 @@ def new_register(req):
     if req.method == 'POST':
         form = UserForm(req.POST)
         if form.is_valid():
+            newUser =  form.save(commit=False)
+            newUser.role = "employee"
+            newUser.authCode = ""
             form.save()
             messages.success(req,"Registeration succesful. Please login to continue...")
-            return render(req,'login.html')
+            return render(req,'myauth/login.html')
         messages.error(req,"Invalid details. Please try again...")
+        return render(req, 'myauth/register.html', {'form': form})
     
     form =  UserForm()
-    return render(req,'signup.html',{'form' : form})
+    return render(req,'myauth/register.html',{'form' : form})
 
 def verify_login(req):
     if req.method == 'POST':
@@ -33,19 +38,19 @@ def verify_login(req):
                     authCode = form.cleaned_data.get('authCode')
                     if len(authCode) != 6 or authCode is not user.authCode:
                         messages.warning(req,"Enter valid authCode...")
-                        return render(req,'login.html',{'form':form})
+                        return render(req,'myauth/login.html',{'form':form})
                 
                 messages.success(req,"Welcome to SmartScout.")
                 login(req,user)
             
             messages.error(req,'User does not exist. Please enter valid data or sign up if not exist.')
-            return render(req,'login.html',{'form':form})
+            return render(req,'myauth/login.html',{'form':form})
         
         messages.error(req,'Enter valid form details...')
-        return render(req,'login.html',{'form':form})    
+        return render(req,'myauth/login.html',{'form':form})    
                 
     form = AuthForm()
-    return render(req,'login.html',{'form':form})                
+    return render(req,'myauth/login.html',{'form':form})                
  
                     
                     

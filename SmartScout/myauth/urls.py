@@ -19,7 +19,7 @@ from .views import logout_request,verify_login,new_register
 app_name = 'myauth'
 
 urlpatterns = [
-    path('signup/',new_register,name = 'signup'),
+    path('register/',new_register,name = 'signup'),
     path('login/',verify_login,name='login'),
     path('logout/',logout_request,name='logout'),
 ]

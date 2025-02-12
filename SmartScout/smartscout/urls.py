@@ -22,9 +22,10 @@ app_name = 'smartscout'
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    # path('myadmin/', include('myadmin.urls')),
-    # path('manager/', include('manager.urls')),
-    # path('employee/', include('employee.urls')),
+    path('myadmin/', include('myadmin.urls')),
+    path('manager/', include('manager.urls')),
+    path('employee/', include('employee.urls')),
+    path('myauth/', include('myauth.urls')),
     path('',home,name="home"),
     
 ]
