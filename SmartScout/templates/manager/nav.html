@@ -1,0 +1,46 @@
+<nav class="bg-[#18181b] text-white">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex justify-between items-center h-16">
+      <!-- Logo Section -->
+      <div class="flex-shrink-0">
+        <a href="#" class="text-2xl font-bold text-[#2DD4BF]">SmartRecruit</a>
+      </div>
+
+      <!-- Navigation Links -->
+      <div class="hidden md:flex space-x-4">
+        <a href="#" class="hover:text-blue-400 px-3 py-2 rounded-md text-sm font-medium">Home</a>
+        <a href="#benefits" class="hover:text-blue-400 px-3 py-2 rounded-md text-sm font-medium">Features</a>
+        {% if user.is_authenticated %}
+          <a href="{% url 'myauth:login' %}" class="hover:text-blue-400 px-3 py-2 rounded-md text-sm font-medium">{{ user.username }}</a>
+          <a href="{% url 'myauth:logout' %}" class="hover:text-blue-400 px-3 py-2 rounded-md text-sm font-medium">Logout</a>
+        {% else %}
+          <a href="{% url 'myauth:login' %}" class="hover:text-blue-400 px-3 py-2 rounded-md text-sm font-medium">Login</a>
+          <a href="{% url 'myauth:signup' %}" class="hover:text-blue-400 px-3 py-2 rounded-md text-sm font-medium">Signup</a>
+        {% endif %}
+      </div>
+
+      <!-- Mobile Menu Button -->
+      <div class="md:hidden">
+        <button id="mobile-menu-button" class="text-gray-400 hover:text-white focus:outline-none">
+          <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mobile Menu -->
+  <div id="mobile-menu" class="hidden md:hidden">
+    <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+      <a href="#" class="block px-3 py-2 rounded-md text-base font-medium hover:text-blue-400">Home</a>
+      {% if user.is_authenticated %}
+          <a href="{% url 'myauth:login' %}" class="hover:text-blue-400 px-3 py-2 block rounded-md text-sm font-medium">{{ user.username }}</a>
+          <a href="{% url 'myauth:logout' %}" class="hover:text-blue-400 px-3 py-2 block rounded-md text-sm font-medium">Logout</a>
+        {% else %}
+          <a href="{% url 'myauth:login' %}" class="hover:text-blue-400 px-3 py-2 block rounded-md text-sm font-medium">Login</a>
+          <a href="{% url 'myauth:signup' %}" class="hover:text-blue-400 px-3 py-2 block rounded-md text-sm font-medium">Signup</a>
+        {% endif %}
+    </div>
+  </div>
+</nav>

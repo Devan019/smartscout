@@ -5,12 +5,156 @@
 {% endblock  %}
 
 {% block content %}
-  <div class="container">
-    <div class="row">
-      <div class="col-md-12">
-        <h1>Employee Home</h1>
-        <p>Welcome to the Employee Home Page</p>
+{% if user.role == 'employee' %}
+  <div class="relative min-h-screen antialiased">
+    <div class="main">
+      <!-- nav bar -->
+      {% include 'employee/nav.html' %}
+
+      <script>
+          // Toggle Mobile Menu
+          document.getElementById("mobile-menu-button").addEventListener("click", () => {
+              const mobileMenu = document.getElementById("mobile-menu");
+              mobileMenu.classList.toggle("hidden");
+          });
+      </script>
+
+      <!-- hero -->
+
+      <div class="sub-main relative z-10">
+          <div class="bg-zinc-900 blob-page w-full h-screen relative z-0">
+              <h1 class="text-4xl top-1/4 w-[350px] left-[100px] text-white absolute z-30">
+                  Smart Recruitment And Employee Management System
+              </h1>
+          </div>
       </div>
-    </div>
+
+      <!-- launage sec -->
+      {% include "include/techstack.html" %}
+
+      <!-- steps -->
+
+      <div class="relative z-10 bg-zinc-900 text-white px-4 py-16 mx-auto md:px-24 lg:px-8 lg:py-20">
+          <div class="max-w-xl mb-10 md:mx-auto sm:text-center lg:max-w-2xl md:mb-12">
+              <div>
+                  <p
+                      class="inline-block px-3 py-px mb-4 text-xs font-semibold tracking-wider text-teal-900 uppercase rounded-full bg-teal-400">
+                      Smart Recruitment
+                  </p>
+              </div>
+              <h2
+                  class="max-w-lg mb-6 font-sans text-3xl font-bold leading-none tracking-tight text-white sm:text-4xl md:mx-auto">
+                  <span class="relative inline-block">
+                      <svg viewBox="0 0 52 24" fill="currentColor"
+                          class="absolute top-0 left-0 z-0 hidden w-32 -mt-8 -ml-20 text-gray-700 lg:w-32 lg:-ml-28 lg:-mt-10 sm:block">
+                          <defs>
+                              <pattern id="pattern-id" x="0" y="0" width=".135" height=".30">
+                                  <circle cx="1" cy="1" r=".7"></circle>
+                              </pattern>
+                          </defs>
+                          <rect fill="url(#pattern-id)" width="52" height="24"></rect>
+                      </svg>
+                      <span class="relative">Simple</span>
+                  </span>
+                  steps to get your dream job
+              </h2>
+              <p class="text-base text-gray-400 md:text-lg">
+                  Our platform simplifies the recruitment process for employees and employers alike. Follow these
+                  steps to start your journey.
+              </p>
+          </div>
+          <div class="grid gap-8 row-gap-0 lg:grid-cols-3">
+              <div class="relative text-center">
+                  <div
+                      class="flex items-center justify-center w-16 h-16 mx-auto mb-4 rounded-full bg-gray-800 sm:w-20 sm:h-20">
+                      <svg class="w-12 h-12 text-teal-400 sm:w-16 sm:h-16" stroke="currentColor" viewBox="0 0 52 52">
+                          <polygon stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none"
+                              points="29 13 14 29 25 29 23 39 38 23 27 23"></polygon>
+                      </svg>
+                  </div>
+                  <h6 class="mb-2 text-2xl font-extrabold">Step 1: Login/Signup</h6>
+                  <p class="max-w-md mb-3 text-sm text-gray-400 sm:mx-auto">
+                      Create an account as an employee or log in to access job opportunities tailored to your
+                      preferences.
+                  </p>
+                  <a href="#" aria-label="Learn more about Step 1"
+                      class="inline-flex items-center font-semibold transition-colors duration-200 text-teal-400 hover:text-teal-300">
+                      Learn more
+                  </a>
+              </div>
+              <div class="relative text-center">
+                  <div
+                      class="flex items-center justify-center w-16 h-16 mx-auto mb-4 rounded-full bg-gray-800 sm:w-20 sm:h-20">
+                      <svg class="w-12 h-12 text-teal-400 sm:w-16 sm:h-16" stroke="currentColor" viewBox="0 0 52 52">
+                          <polygon stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none"
+                              points="29 13 14 29 25 29 23 39 38 23 27 23"></polygon>
+                      </svg>
+                  </div>
+                  <h6 class="mb-2 text-2xl font-extrabold">Step 2: Apply to Companies</h6>
+                  <p class="max-w-md mb-3 text-sm text-gray-400 sm:mx-auto">
+                      Browse through job listings and apply to your preferred companies with just a few clicks.
+                  </p>
+                  <a href="#" aria-label="Learn more about Step 2"
+                      class="inline-flex items-center font-semibold transition-colors duration-200 text-teal-400 hover:text-teal-300">
+                      Learn more
+                  </a>
+              </div>
+              <div class="relative text-center">
+                  <div
+                      class="flex items-center justify-center w-16 h-16 mx-auto mb-4 rounded-full bg-gray-800 sm:w-20 sm:h-20">
+                      <svg class="w-12 h-12 text-teal-400 sm:w-16 sm:h-16" stroke="currentColor" viewBox="0 0 52 52">
+                          <polygon stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none"
+                              points="29 13 14 29 25 29 23 39 38 23 27 23"></polygon>
+                      </svg>
+                  </div>
+                  <h6 class="mb-2 text-2xl font-extrabold">Step 3: Wait for HR Call</h6>
+                  <p class="max-w-md mb-3 text-sm text-gray-400 sm:mx-auto">
+                      Once you've applied, wait for HR representatives to review your application and contact you for
+                      the next steps.
+                  </p>
+                  <a href="#" aria-label="Learn more about Step 3"
+                      class="inline-flex items-center font-semibold transition-colors duration-200 text-teal-400 hover:text-teal-300">
+                      Learn more
+                  </a>
+              </div>
+          </div>
+          <div class="mt-10 text-center">
+              <a href="#get-started"
+                  class="px-8 py-3 text-lg font-semibold text-white bg-teal-500 rounded-full shadow-lg hover:shadow-2xl hover:bg-teal-400 focus:outline-none focus:ring-4 focus:ring-teal-300 transition-transform transform hover:scale-105">
+                  Get Started
+              </a>
+          </div>
+      </div>
+
+      <!-- features -->
+
+
+      <!-- footer -->
+      {% include "include/footer.html" %}
+
+
+
   </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/110/three.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/vanta/0.5.24/vanta.globe.min.js"></script>
+
+  <script>
+      VANTA.GLOBE({
+          el: ".blob-page",
+          mouseControls: true,
+          touchControls: true,
+          gyroControls: false,
+          minHeight: 200.00,
+          minWidth: 200.00,
+          scale: 1.00,
+          scaleMobile: 1.00,
+          color: '#2dd4bf',
+          backgroundColor: '#18181b'
+      })
+  </script>
+  </div>
+  {% else %} 
+  {% include "include/404.html" %}
+  {% endif %}
+
 {% endblock  %}

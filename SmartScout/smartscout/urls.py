@@ -14,12 +14,15 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+from django.conf.urls import handler404
 from django.contrib import admin
 from django.urls import path, include
-from .views import home
+from .views import notfound,home
+from django.contrib.auth import views as auth_views
+
 
 app_name = 'smartscout'
-
+handler404 = 'smartscout.views.notfound'
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('myadmin/', include('myadmin.urls')),
@@ -27,5 +30,7 @@ urlpatterns = [
     path('employee/', include('employee.urls')),
     path('myauth/', include('myauth.urls')),
     path('',home,name="home"),
+    # path('<path:unknown_path>/', notfound, name="notfound")
+
     
 ]

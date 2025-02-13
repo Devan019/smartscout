@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 - Page Not Found</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @keyframes glitch {
+            0% { text-shadow: 2px 2px #ff00ff, -2px -2px #00ffff; }
+            50% { text-shadow: -2px -2px #ff00ff, 2px 2px #00ffff; }
+            100% { text-shadow: 2px 2px #ff00ff, -2px -2px #00ffff; }
+        }
+        .glitch {
+            animation: glitch 0.8s infinite alternate;
+        }
+    </style>
+</head>
+<body class="bg-zinc-900 text-white flex items-center justify-center h-screen">
+    <div class="text-center">
+        <h1 class="text-7xl font-bold glitch">404</h1>
+        <p class="text-xl text-zinc-400 mt-4">Oops! The page you're looking for doesn't exist.</p>
+        <a href="/" class="mt-6 inline-block px-6 py-3 text-lg font-semibold text-white bg-zinc-700 rounded-lg hover:bg-zinc-600 transition">Go Home</a>
+    </div>
+</body>
+</html>
