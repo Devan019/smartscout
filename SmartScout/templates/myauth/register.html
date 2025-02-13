@@ -27,15 +27,15 @@
               </defs>
               <rect fill="url(#766323e1-e594-4ffd-a688-e7275079d540)" width="52" height="24"></rect>
             </svg>
-            <div class="bg-zinc-950 text-white relative bg-white rounded shadow-2xl p-7 sm:p-10">
+            <div class="bg-zinc-950 text-black relative rounded shadow-2xl p-7 sm:p-10">
+              
+              <h3 class="text-white mb-4 text-xl font-semibold sm:text-center sm:mb-6 sm:text-2xl">Sign up for Employee</h3>
               {% for field in form %}
                 {% for error in field.errors %}
                   <p class="text-red-500 text-sm">{{ error }}</p>
                 {% endfor %}
               {% endfor %}
-
-              <h3 class="mb-4 text-xl font-semibold sm:text-center sm:mb-6 sm:text-2xl">Sign up for updates</h3>
-              <form method="post" class='text-black'>
+              <form method="post">
                 {% csrf_token %}
 
                 <div class="mb-4">
