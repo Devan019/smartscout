@@ -3,6 +3,8 @@
 {% block content %}
   <script src="https://cdn.tailwindcss.com"></script>
 
+
+
   <div class="overflow-hidden bg-gray-900 min-h-screen">
     <div class="px-4 py-16 mx-auto sm:max-w-xl md:max-w-full lg:max-w-screen-xl md:px-24 lg:px-8 lg:py-20">
       <div class="flex flex-col items-center justify-between xl:flex-row-reverse">
@@ -57,7 +59,8 @@
                 </div>
 
                 <!-- Activation Code Field (Hidden by Default) -->
-                <div id="activation-code-field" class="hidden">
+                
+                <div id="activation-code-field" style="display: none;">
                   <label for="activation-code" class="block text-sm font-medium text-gray-600">Activation Code</label>
                   {{form.authCode}}
                 </div>
@@ -84,5 +87,23 @@
     </div>
   </div>
 
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const roleSelect = document.getElementById("id_role");  // Django form field ID
+        const activationCodeField = document.getElementById("activation-code-field");
+  
+        function toggleActivationField() {
+          console.log("Entered")
+            if (roleSelect.value === "Employee") {
+                activationCodeField.style.display = "none";
+            } else {
+                activationCodeField.style.display = "block";
+            }
+        }
+  
+        roleSelect.addEventListener("change", toggleActivationField);
+        toggleActivationField(); // Run on page load
+    });
+  </script>
  
 {% endblock %}
