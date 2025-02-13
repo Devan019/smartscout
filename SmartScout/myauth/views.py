@@ -16,7 +16,7 @@ def new_register(req):
             newUser.authCode = ""
             form.save()
             messages.success(req,"Registeration succesful. Please login to continue...")
-            return render(req,'myauth/login.html')
+            return redirect('/myapp/login')
         messages.error(req,"Invalid details. Please try again...")
         return render(req, 'myauth/register.html', {'form': form})
     

@@ -3,6 +3,8 @@
 {% block content %}
   <script src="https://cdn.tailwindcss.com"></script>
 
+  
+
   <div class="overflow-hidden bg-gray-900 min-h-screen">
     <div class="px-4 py-16 mx-auto sm:max-w-xl md:max-w-full lg:max-w-screen-xl md:px-24 lg:px-8 lg:py-20">
       <div class="flex flex-col items-center justify-between xl:flex-row-reverse">
@@ -52,19 +54,16 @@
 
                
                 <div class="flex flex-col space-y-2">
-                  <label for="desigoption" class="text-sm font-medium text-gray-700">Login as</label>
+                  <label for="role" class="text-sm font-medium text-gray-700">Login as</label>
                   {{form.role}}
                 </div>
 
-                <!-- Activation Code Field (Hidden by Default) -->
-                <div id="activation-code-field" class="hidden">
+                
+                <div id="activation-code-field" >
                   <label for="activation-code" class="block text-sm font-medium text-gray-600">Activation Code</label>
                   {{form.authCode}}
                 </div>
 
-                
-
-                <!-- Submit Button -->
                 <div>
                   <button type="submit" class="w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500">Log In</button>
                 </div>
@@ -84,5 +83,22 @@
     </div>
   </div>
 
+  
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const roleSelect = document.querySelector("select[name='role']"); // Find select element
+  
+      roleSelect.addEventListener("change", function () {
+        const selectedValue = roleSelect.value;
+        if(selectedValue == "employee"){
+          document.querySelector("#activation-code-field").classList.add("hidden");
+        }else{
+          document.querySelector("#activation-code-field").classList.remove("hidden");
+        }
+      });
+    });
+  </script>
+  
+  
  
 {% endblock %}

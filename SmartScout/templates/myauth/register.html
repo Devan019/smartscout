@@ -1,7 +1,7 @@
 {% extends 'index.html' %}
 
 {% block content %}
-  <div class="overflow-hidden bg-gray-900">
+  <div class="overflow-hidden bg-gray-900 h-screen">
     <div class="px-4 py-16 mx-auto sm:max-w-xl md:max-w-full lg:max-w-screen-xl md:px-24 lg:px-8 lg:py-20">
       <div class="flex flex-col items-center justify-between xl:flex-row">
         <div class="w-full max-w-xl mb-12 xl:pr-16 xl:mb-0 xl:w-7/12">
@@ -27,14 +27,14 @@
               </defs>
               <rect fill="url(#766323e1-e594-4ffd-a688-e7275079d540)" width="52" height="24"></rect>
             </svg>
-            <div class="bg-zinc-950 text-white relative bg-white rounded shadow-2xl p-7 sm:p-10">
+            <div class="bg-zinc-950 text-black relative rounded shadow-2xl p-7 sm:p-10">
+              
+              <h3 class="text-white mb-4 text-xl font-semibold sm:text-center sm:mb-6 sm:text-2xl">Sign up for Employee</h3>
               {% for field in form %}
                 {% for error in field.errors %}
                   <p class="text-red-500 text-sm">{{ error }}</p>
                 {% endfor %}
               {% endfor %}
-
-              <h3 class="mb-4 text-xl font-semibold sm:text-center sm:mb-6 sm:text-2xl">Sign up for updates</h3>
               <form method="post">
                 {% csrf_token %}
 
