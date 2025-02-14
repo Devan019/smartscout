@@ -4,6 +4,9 @@ from .forms import ManagerForm
 from django.shortcuts import get_object_or_404
 from .models import Manager
 import random
+from django.core.mail import send_mail
+from django.conf import settings
+from .messege import send_manager_email
 
 def generate_auth_code():
     return str(random.randint(100000, 999999))
@@ -27,8 +30,9 @@ def createManager(req):
         if form.is_valid():
             manager = form.save(commit=False) 
             manager.auth_code = generate_auth_code()
-            manager.save()
+            send_manager_email(manager.emailid,manager.auth_code,manager.contact,manager.name)
             print("Saved:", manager)
+            manager.save()
     return redirect("myadmin:panel")
 
 

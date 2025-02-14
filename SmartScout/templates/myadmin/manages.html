@@ -7,7 +7,7 @@
 {% block content %}
   <div class="main flex flex-col">
     {% include 'myadmin/nav.html' %}
-    <div class="h-screen w-full relative m-auto max-w-7xl z-10">
+    <div class="min-h-screen w-full relative m-auto max-w-7xl z-10">
       <h1 class="text-2xl font-bold mb-6">Manage Managers 🧑‍💼👩‍💼</h1>
 
       <!-- Current Managers List -->
@@ -20,12 +20,9 @@
               <h3 class="text-md font-bold">{{manager.name}} 🧑‍💼</h3>
               <p class="text-sm text-gray-400 mt-2">Email: {{manager.emailid}}</p>
               <p class="text-sm text-gray-400">Phone: {{manager.contact}}</p>
-              {% comment %} <p class="text-sm text-gray-400">
-                Activation Code: <span class="font-mono">ACT12345</span>
-              </p> {% endcomment %}
               <div class="mt-4 flex justify-between">
-                <button class="px-3 py-1 bg-yellow-500 text-white text-sm rounded-md hover:bg-yellow-600" onclick="editManager('John Manager')">Edit ✏️</button>
-                <button class="px-3 py-1 bg-red-500 text-white text-sm rounded-md hover:bg-red-600" onclick="deleteManager('John Manager')">Delete 🗑️</button>
+                <button id="edit" class="px-3 py-1 bg-yellow-500 text-white text-sm rounded-md hover:bg-yellow-600" onclick="editManager('{{manager.name}}')">Edit ✏️</button>
+                <button class="px-3 py-1 bg-red-500 text-white text-sm rounded-md hover:bg-red-600" onclick="deleteManager('{{manager.name}}')">Delete 🗑️</button>
               </div>
             </div>
           {% endfor %}
@@ -94,6 +91,7 @@
       }
       
       function editManager(name) {
+        console.log()
         document.getElementById('manager-form').classList.remove('hidden')
         document.getElementById('form-title').textContent = 'Edit Manager Details ✏️'
         // Prefill fields with manager data (example only)
@@ -101,6 +99,8 @@
         document.getElementById('manager-email').value = `${name.toLowerCase().replace(/ /g, '.')}@example.com`
         document.getElementById('manager-phone').value = '+1234567890'
       }
+
+      document.querySelector("#edit").addEventListener("click")
       
       function deleteManager(name) {
         if (confirm(`Are you sure you want to delete manager: ${name}?`)) {
