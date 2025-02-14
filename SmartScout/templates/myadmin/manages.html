@@ -40,7 +40,7 @@
       </div>
 
       <!-- Add/Edit Manager Form -->
-      <div id="manager-form" class="bg-gray-800 p-6 rounded-lg shadow-md hidden">
+      <div id="manager-form" class="bg-gray-800 p-6 rounded-lg shadow-md hidden absolute top-4">
         <h2 id="form-title" class="text-lg font-bold mb-4">Add New Manager ✨</h2>
         <form id="manager-form-fields" method="post" action="{% url 'myadmin:createManager' %}">
           {% csrf_token %}

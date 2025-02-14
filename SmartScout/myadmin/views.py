@@ -14,7 +14,10 @@ def home(req):
 
 @login_required
 def panel(req):
-  return render(req,"myadmin/manages.html")
+  managers = Manager.objects.all()
+  return render(req,"myadmin/manages.html",{
+    'managers' : managers
+  })
 
 @login_required
 def createManager(req):
@@ -38,12 +41,7 @@ def updateManager(req,id):
     print(manager)
 
   return redirect("panel")
-
-def getAllManagers(req):
-  managers = get_object_or_404(Manager)
-  return render(req,"myadmin/manages.html",{
-    'managers' : managers
-  })
+ 
 
 def deleteManager(req,id):
   manager = get_object_or_404(Manager,id=id)
