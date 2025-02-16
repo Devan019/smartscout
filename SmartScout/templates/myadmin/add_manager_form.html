@@ -1,0 +1,64 @@
+{% extends 'index.html' %}
+
+{% block title %}
+  Manage Panal
+{% endblock %}
+
+{% block content %}
+  <div class="main flex flex-col overflow-hidden">
+    {% include 'myadmin/nav.html' %}
+      <!-- Add/Edit Manager Form -->
+      <div id="manager-form" class="bg-gray-800 p-6 rounded-lg shadow-md w-2/3 m-auto mt-4 mb-4">
+        <h2 id="form-title" class="text-lg text-white font-bold mb-4">Add New Manager ✨</h2>
+        <form id="manager-form-fields" method="post">
+          {% csrf_token %}
+          <div class="mb-4">
+            <label for="manager-name" class="block text-sm font-medium text-gray-300">Name</label>
+            <input type="text" id="manager-name" class="w-full mt-1 border border-gray-600 rounded-md shadow-sm px-2 py-1 text-gray-800 focus:ring-indigo-500 focus:border-indigo-500" name="name" required
+            value="{{ manager.name|default:'' }}"
+            />
+          </div>
+          <div class="mb-4">
+            <label for="manager-email" class="block text-sm font-medium text-gray-300">Email</label>
+            <input type="email" id="manager-email" class="w-full mt-1 border border-gray-600 rounded-md shadow-sm px-2 py-1 text-gray-800 focus:ring-indigo-500 focus:border-indigo-500" name="emailid" required
+            value="{{ manager.emailid|default:'' }}" />
+          </div>
+          <div class="mb-4">
+            <label for="manager-phone" class="block text-sm font-medium text-gray-300">Phone</label>
+            <input type="text" id="manager-phone" class="w-full mt-1 border border-gray-600 rounded-md shadow-sm px-2 py-1 text-gray-800 focus:ring-indigo-500 focus:border-indigo-500" name="contact" required
+            value="{{ manager.contact|default:'' }}" />
+          </div>
+          <div class="text-right">
+            <a href="{% url 'myadmin:panel' %}">
+                <button type="button" class="px-4 py-2 bg-gray-500 text-white font-bold rounded-md shadow hover:bg-gray-600 focus:outline-none mr-2">Cancel ❌</button>
+            </a>
+            <button type="submit" class="px-4 py-2 bg-blue-500 text-white font-bold rounded-md shadow hover:bg-blue-600 focus:outline-none"
+            >Save Manager 💾</button>
+          </div>
+        </form>
+      </div>
+    </div>
+    <div class=" relative">
+      {% include 'include/footer.html' %}
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/110/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vanta/0.5.24/vanta.net.min.js"></script>
+    <script>
+      VANTA.NET({
+        el: 'body',
+        mouseControls: true,
+        touchControls: true,
+        gyroControls: false,
+        minHeight: 200.0,
+        minWidth: 200.0,
+        scale: 1.0,
+        scaleMobile: 1.0,
+        color: 0x3b82f6, // Soft blue for the net color
+        backgroundColor: 0x1a1a1a, // Dark gray background
+        points: 20.0,
+        maxDistance: 24.0
+      })
+      
+    </script>
+  </div>
+{% endblock %}
