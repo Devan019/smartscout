@@ -3,6 +3,7 @@ from django.contrib import messages
 from django.shortcuts import redirect, render
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import authenticate,logout,login
+
 from .forms import UserForm,AuthForm
 import os
 # Create your views here.
@@ -13,7 +14,6 @@ def new_register(req):
         if form.is_valid():
             newUser =  form.save(commit=False)
             newUser.role = "employee"
-            newUser.authCode = ""
             form.save()
             messages.success(req,"Registeration succesful. Please login to continue...")
             return redirect('/myauth/login')
@@ -43,24 +43,16 @@ def verify_login(req):
 
                 
                 if role != 'employee':
-                    authCode = form.cleaned_data.get('authCode')
-                    # print("Entered authCode:", authCode)
-                    # print("User authCode:", user.authCode)
-
                     if role == 'manager':
-                    
-                        if len(authCode) != 6 or authCode != user.authCode:
-                            messages.warning(req, "Enter a valid authCode...")
-                            return render(req, 'myauth/login.html', {'form': form})
+                  
                         login(req, user)
-                        
                         return redirect('/manager')
                     else:
-                        if authCode == os.getenv('ADMIN_KEY'):
-                            login(req, user)
-                            print("in bro")
-                            return redirect('/myadmin/')  
-                        return render(req, 'myauth/login.html', {'form': form})
+                        
+                        login(req, user)
+                        print("in bro")
+                        return redirect('/myadmin/') 
+                        
 
                 messages.success(req, "Welcome to SmartScout.")
                 print(user)

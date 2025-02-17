@@ -6,13 +6,13 @@ from .models import CustomUser
 
 class CustomUserAdmin(UserAdmin):
     fieldsets = UserAdmin.fieldsets + (
-        ('More Fields', {'fields': ('role','authCode')}),
+        ('More Fields', {'fields': ('role',)}),
     )
     add_fieldsets = UserAdmin.add_fieldsets + (
-        ('More Fields', {'fields': ('role','authCode')}),
+        ('More Fields', {'fields': ('role',)}),
     )
 
-    list_display = ('username', 'email', 'role','authCode', 'is_staff', 'is_active')
-    search_fields = ('username', 'email', 'role','authCode')
+    list_display = ('username', 'email', 'role', 'is_staff', 'is_active')
+    search_fields = ('username', 'email', 'role')
 
 admin.site.register(CustomUser, CustomUserAdmin)

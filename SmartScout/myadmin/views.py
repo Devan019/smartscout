@@ -1,6 +1,8 @@
 import string
 from django.shortcuts import render,redirect
 from django.contrib.auth.decorators import login_required
+
+from myauth.models import CustomUser
 from .forms import ManagerForm
 from django.shortcuts import get_object_or_404
 from .models import Manager, ManagerAuth
@@ -13,7 +15,7 @@ from .messege import send_manager_email
 def generate_auth_code():
     code = None
     while code is None or ManagerAuth.objects.filter(auth_code=code).exists():
-        code = ''.join(random.choices(string.ascii_uppercase + string.ascii_lowercase + string.digits, k=6))  
+        code = ''.join(random.choices(string.ascii_uppercase + string.ascii_lowercase + string.digits, k=8))  
     return code
 
 @login_required
@@ -39,6 +41,13 @@ def createManager(req):
           print("Saved:", manager)
           user = manager.save()
           ManagerAuth.objects.create(mid=manager, auth_code=auth_code)
+          user1 = CustomUser()
+          user1.role = 'manager'
+          user1.username = manager.name
+          user1.set_password(auth_code)
+          user1.email = manager.emailid
+          user1.save()
+          
       return redirect("myadmin:panel")
     return render(req,'myadmin/add_manager_form.html')
 

@@ -13,7 +13,7 @@ class Manager(models.Model):
 
 class ManagerAuth(models.Model):
     manager = models.ForeignKey(Manager, on_delete=models.CASCADE, name="mid")
-    auth_code = models.CharField(max_length=6, validators=[MinLengthValidator(6)],unique=True,)
+    auth_code = models.CharField(max_length=8, validators=[MinLengthValidator(6)],unique=True,)
     def __str__(self):
         return self.auth_code
     
