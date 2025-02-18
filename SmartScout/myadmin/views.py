@@ -69,6 +69,12 @@ def updateManager(req,id=0):
 @login_required
 def deleteManager(req,id):
   manager = get_object_or_404(Manager,id=id)
+  try:
+      user = CustomUser.objects.get(username=manager.name)
+      print(f"Deleting CustomUser: {user}")
+      user.delete()
+  except CustomUser.DoesNotExist:
+      print("CustomUser not found!")
   manager.delete()
   print("thai vyo delete")
   return redirect("myadmin:panel")
