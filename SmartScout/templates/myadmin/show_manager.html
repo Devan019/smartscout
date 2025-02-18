@@ -1,0 +1,97 @@
+{% extends 'index.html' %}
+
+{% block title %}
+  Manage Panal
+{% endblock %}
+
+{% block content %}
+  <div class="main flex flex-col">
+    {% include 'myadmin/nav.html' %}
+    <div class="min-h-screen w-full relative m-auto max-w-7xl z-10">
+      <h1 class="text-2xl font-bold mb-6 text-white">Manage Managers 🧑‍💼👩‍💼</h1>
+
+      <!-- Current Managers List -->
+      <div class="bg-gray-800 p-6 rounded-lg shadow-md mb-6 relative">
+        <h2 class="text-lg font-bold mb-4 text-white">Current Managers 💼</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <!-- Manager Card Example -->
+          {% for manager in managers %}
+            <div class="bg-gray-700 p-4 rounded-lg shadow-md relative">
+              <h3 class="text-md text-white font-bold">{{forloop.counter}} 🧑‍💼 {{manager.name}}</h3>
+              <p class="text-sm text-gray-400 mt-2">Email: {{manager.emailid}}</p>
+              <p class="text-sm text-gray-400">Phone: {{manager.contact}}</p>
+              <div class="mt-4 flex justify-between">
+                <a href="{% url 'myadmin:updateManager' manager.id %}">
+                    <button id="edit" class="px-3 py-1 bg-yellow-500 text-white text-sm rounded-md hover:bg-yellow-600">Edit ✏️</button>
+                </a>
+                <a href="{% url 'myadmin:deleteManager' manager.id %}">
+                    <button class="px-3 py-1 bg-red-500 text-white text-sm rounded-md hover:bg-red-600" onclick="deleteManager('{{manager.name}}')">Delete 🗑️</button>
+                </a>
+                </div>
+            </div>
+          {% endfor %}
+
+          <!-- Add other manager cards here -->
+        </div>
+      </div>
+
+      <!-- Add Manager Section -->
+      <div class="text-right mb-6">
+        <a href="{% url 'myadmin:createManager' %}">
+            <button class="px-4 py-2 bg-green-500 text-white font-bold rounded-md shadow hover:bg-green-600 focus:outline-none">+ Add New Manager ✨</button>
+        </a>
+        </div>
+
+    </div>
+
+
+    <div class="z-0 relative">
+      {% include 'include/footer.html' %}
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/110/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vanta/0.5.24/vanta.net.min.js"></script>
+    <script>
+      VANTA.NET({
+        el: 'body',
+        mouseControls: true,
+        touchControls: true,
+        gyroControls: false,
+        minHeight: 200.0,
+        minWidth: 200.0,
+        scale: 1.0,
+        scaleMobile: 1.0,
+        color: 0x3b82f6, // Soft blue for the net color
+        backgroundColor: 0x1a1a1a, // Dark gray background
+        points: 20.0,
+        maxDistance: 24.0
+      })
+      
+      function showAddManagerForm() {
+        
+      }
+      
+      function hideAddManagerForm() {
+        document.getElementById('manager-form').classList.add('hidden')
+      }
+      
+      function editManager(name) {
+        console.log()
+        
+        document.getElementById('manager-form').classList.remove('hidden')
+        document.getElementById('form-title').textContent = 'Edit Manager Details ✏️'
+        // Prefill fields with manager data (example only)
+        document.getElementById('manager-name').value = name
+        document.getElementById('manager-email').value = `${name.toLowerCase().replace(/ /g, '.')}@example.com`
+        document.getElementById('manager-phone').value = '+1234567890'
+      }
+
+      
+      function deleteManager(name) {
+        if (confirm(`Are you sure you want to delete manager: ${name}?`)) {
+          // Perform delete action (e.g., send request to server)
+          alert(`${name} has been deleted. 🗑️`)
+        }
+      }
+    </script>
+  </div>
+{% endblock %}

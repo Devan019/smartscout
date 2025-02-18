@@ -17,11 +17,14 @@
           <!-- Manager Card Example -->
           {% for manager in managers %}
             <div class="bg-gray-700 p-4 rounded-lg shadow-md relative">
-              <h3 class="text-md font-bold">{{manager.name}} 🧑‍💼</h3>
+              <h3 class="text-md font-bold">{{manager.id}} 🧑‍💼</h3>
               <p class="text-sm text-gray-400 mt-2">Email: {{manager.emailid}}</p>
               <p class="text-sm text-gray-400">Phone: {{manager.contact}}</p>
               <div class="mt-4 flex justify-between">
-                <button id="edit" class="px-3 py-1 bg-yellow-500 text-white text-sm rounded-md hover:bg-yellow-600" onclick="editManager('{{manager.name}}')">Edit ✏️</button>
+                <button id="edit" class="px-3 py-1 bg-yellow-500 text-white text-sm rounded-md hover:bg-yellow-600" onclick="()=>{
+                  mid = manager.id
+                  editManager('{{manager.name}}')
+                  }">Edit ✏️</button>
                 <button class="px-3 py-1 bg-red-500 text-white text-sm rounded-md hover:bg-red-600" onclick="deleteManager('{{manager.name}}')">Delete 🗑️</button>
               </div>
             </div>
@@ -39,7 +42,7 @@
       <!-- Add/Edit Manager Form -->
       <div id="manager-form" class="bg-gray-800 p-6 rounded-lg shadow-md hidden absolute top-4">
         <h2 id="form-title" class="text-lg font-bold mb-4">Add New Manager ✨</h2>
-        <form id="manager-form-fields" method="post" action="{% url 'myadmin:createManager' %}">
+        <form id="manager-form-fields" method="post" action="{% url  'myadmin:createManager' mid%}">
           {% csrf_token %}
           <div class="mb-4">
             <label for="manager-name" class="block text-sm font-medium text-gray-300">Name</label>
@@ -55,7 +58,9 @@
           </div>
           <div class="text-right">
             <button type="button" class="px-4 py-2 bg-gray-500 text-white font-bold rounded-md shadow hover:bg-gray-600 focus:outline-none mr-2" onclick="hideAddManagerForm()">Cancel ❌</button>
-            <button type="submit" class="px-4 py-2 bg-blue-500 text-white font-bold rounded-md shadow hover:bg-blue-600 focus:outline-none">Save Manager 💾</button>
+            <button type="submit" class="px-4 py-2 bg-blue-500 text-white font-bold rounded-md shadow hover:bg-blue-600 focus:outline-none"
+            
+            >Save Manager 💾</button>
           </div>
         </form>
       </div>
@@ -92,6 +97,7 @@
       
       function editManager(name) {
         console.log()
+        
         document.getElementById('manager-form').classList.remove('hidden')
         document.getElementById('form-title').textContent = 'Edit Manager Details ✏️'
         // Prefill fields with manager data (example only)
