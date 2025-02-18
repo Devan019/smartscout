@@ -77,7 +77,6 @@ def logout_request(req):
     messages.success(req,'Logged out successfully...')
     return redirect('home')
 
-from django.shortcuts import render
 
 # Create your views here.
 def user(req):
