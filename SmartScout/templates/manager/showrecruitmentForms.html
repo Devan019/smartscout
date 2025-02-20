@@ -1,0 +1,74 @@
+{% extends 'index.html' %}
+
+{% block title %}
+  Recruitment Panel
+{% endblock %}
+
+{% block content %}
+  <div class="main flex flex-col">
+    {% include 'manager/nav.html' %}
+    <div class="min-h-screen w-full relative m-auto max-w-7xl z-10">
+      <h1 class="text-2xl font-bold mb-6 text-white">Manage Job Postings 📢💼</h1>
+
+      <!-- Current Job Listings -->
+      <div class="bg-gray-800 p-6 rounded-lg shadow-md mb-6 relative">
+        <h2 class="text-lg font-bold mb-4 text-white">Current Job Openings 🚀</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {% for job in jobs %}
+            <div class="bg-gray-700 p-4 rounded-lg shadow-md relative">
+              <h3 class="text-md text-white font-bold">{{ forloop.counter }} 💼 {{ job.title }}</h3>
+              <p class="text-sm text-gray-400 mt-2">📄 Job Details: {{ job.job_details }}</p>
+              <p class="text-sm text-gray-400">🛠 Required Skills: {{ job.skill_required }}</p>
+              <p class="text-sm text-gray-400">💰 Expected Salary: ₹{{ job.expected_salary }}</p>
+              <p class="text-sm text-gray-400">📅 Minimum Experience: {{ job.minimum_experience }} years</p>
+              <div class="mt-4 flex justify-between">
+                <a href="{% url 'myadmin:updateJob' job.id %}">
+                  <button id="edit" class="px-3 py-1 bg-yellow-500 text-white text-sm rounded-md hover:bg-yellow-600">Edit ✏️</button>
+                </a>
+                <a href="{% url 'myadmin:deleteJob' job.id %}">
+                  <button class="px-3 py-1 bg-red-500 text-white text-sm rounded-md hover:bg-red-600" onclick="deleteJob('{{ job.title }}')">Delete 🗑️</button>
+                </a>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+
+      <!-- Add Job Posting Section -->
+      <div class="text-right mb-6">
+        <a href="{% url 'manager:genarateForm' %}">
+          <button class="px-4 py-2 bg-green-500 text-white font-bold rounded-md shadow hover:bg-green-600 focus:outline-none">+ Post a New Job ✨</button>
+        </a>
+      </div>
+    </div>
+
+    <div class="z-0 relative">
+      {% include 'include/footer.html' %}
+    </div>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/110/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vanta/0.5.24/vanta.net.min.js"></script>
+    <script>
+      VANTA.NET({
+        el: 'body',
+        mouseControls: true,
+        touchControls: true,
+        gyroControls: false,
+        minHeight: 200.0,
+        minWidth: 200.0,
+        scale: 1.0,
+        scaleMobile: 1.0,
+        color: 0x3b82f6, 
+        backgroundColor: 0x1a1a1a, 
+        points: 20.0,
+        maxDistance: 24.0
+      });
+      
+      function deleteJob(title) {
+        if (confirm(`Are you sure you want to delete the job: ${title}?`)) {
+          alert(`${title} has been deleted. 🗑️`);
+        }
+      }
+    </script>
+  </div>
+{% endblock %}

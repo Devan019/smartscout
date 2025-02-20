@@ -16,9 +16,11 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from .views import home
+from . import views
 app_name = 'manager'
 
 urlpatterns = [
-    path('',home,name="home")
+    path('',views.home,name="home"),
+    path('forms/',views.getRecruitmentForm, name="readForms"),
+    path("forms/create/",views.generateRecruitmentForm , name="genarateForm"),
 ]
