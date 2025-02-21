@@ -23,6 +23,7 @@ urlpatterns = [
     path('',views.home,name="home"),
     path('forms/',views.getRecruitmentForm, name="readForms"),
     path("forms/create/",views.generateRecruitmentForm , name="genarateForm"),
-    path('forms/deactivate', views.doDeactivate, name="deactivate"),
+    path('forms/deactivate/<int:id>/', views.doDeactivate, name="deactivate"),
+    path('forms/activate/<int:id>/', views.doActivate, name="activate"),
     # path('forms/create/', views.generateRecruitmentForm, name="upadteForm")
 ]

@@ -16,7 +16,6 @@
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {% for job in jobs %}
 
-<<<<<<< HEAD
             {% if job.form_status %}
                 <div class="bg-gray-700 p-4 rounded-lg shadow-md relative flex flex-col h-full">
                   <h3 class="text-md text-white font-bold">{{ forloop.counter }} 💼 {{ job.title }}</h3>
@@ -39,34 +38,14 @@
                       </a> 
                       {% endcomment %}
               
-                      {% comment %} 
-                      <a href="{% url 'manager:' job.id %}"> 
-                      {% endcomment %}
+                      <a href="{% url 'manager:deactivate' job.id %}"> 
                       <div class="mt-auto flex justify-end">
                         <button class="px-3 py-1 bg-red-500 text-white text-sm rounded-md hover:bg-red-600">
                             Deactivate
                         </button>
                     </div>
-                      {% comment %} 
                       </a> 
-                      {% endcomment %}
                   </div>
-=======
-                {% for skill in job.skills_required %}
-                  <span class="bg-gray-600 text-white px-2 py-1 rounded-md text-sm">{{ skill }}</span>
-                {% endfor %}
-
-              </p>
-              <p class="text-sm text-gray-400">💰 Expected Salary: ₹{{ job.expected_salary }}</p>
-              <p class="text-sm text-gray-400">📅 Minimum Experience: {{ job.minimum_experience }} years</p>
-              <div class="mt-4 flex justify-between">
-                {% comment %} <a href="{% url 'manager:upadteForm' job.id %}">
-                  <button id="edit" class="px-3 py-1 bg-yellow-500 text-white text-sm rounded-md hover:bg-yellow-600">Edit ✏️</button>
-                </a> {% endcomment %}
-                {% comment %} <a href="{% url 'myadmin:deleteJob' job.id %}">
-                  <button class="px-3 py-1 bg-red-500 text-white text-sm rounded-md hover:bg-red-600" onclick="deleteJob('{{ job.title }}')">Delete 🗑️</button>
-                </a> {% endcomment %}
->>>>>>> b915a5dacb38b00a079378575365187030298c09
               </div>
             {% endif %}
           {% endfor %}
@@ -100,17 +79,13 @@
                       </a> 
                       {% endcomment %}
               
-                      {% comment %} 
-                      <a href="{% url 'manager:' job.id %}"> 
-                      {% endcomment %}
+                      <a href="{% url 'manager:activate' job.id %}"> 
                       <div class="mt-auto flex justify-end">
                         <button class="px-3 py-1 bg-green-500 text-white text-sm rounded-md hover:bg-green-600">
                             Activate
                         </button>
                     </div>
-                      {% comment %} 
                       </a> 
-                      {% endcomment %}
                   </div>
               </div>
             {% endif %}
