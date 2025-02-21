@@ -46,11 +46,12 @@
                  {% csrf_token %}
 
 
-                <input type="text" hidden name="skills_required" id="skills">
+                 <input type="hidden" name="skills_required" id="skillsField">
+
 
                 <div class="mb-4">
                   <label for="jobDetail" class="block text-sm font-medium text-gray-500">Job Detail</label>
-                  <textarea id="jobDetail" name="jobDetail" rows="4" class="w-full mt-2 bg-transparent px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 text-sm"></textarea>
+                  <textarea id="jobDetail" name="job_details" rows="4" class="w-full mt-2 bg-transparent px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 text-sm"></textarea>
                 </div>
   
                 <!-- Skills Required -->
@@ -67,13 +68,13 @@
                 <div class="flex gap-2">
                   <div class="mb-4">
                       <label for="expectedSalary" class="block text-sm font-medium text-gray-500">Expected Salary</label>
-                      <input type="number" id="expectedSalary" name="expectedSalary" class="w-full mt-2 bg-transparent border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                      <input type="number" id="expectedSalary" name="expected_salary" class="w-full mt-2 bg-transparent border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
                     </div>
       
                     <!-- Minimum Experience -->
                     <div class="mb-4">
                       <label for="minExperience" class="block text-[12px] font-medium text-gray-500">Minimum Experience</label>
-                      <input type="number" id="minExperience" name="minExperience" class="w-full mt-2 bg-transparent border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                      <input type="number" id="minExperience" name="minimum_experience" class="w-full mt-2 bg-transparent border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
                     </div>
                 </div>
   
@@ -91,54 +92,52 @@
     </div>
   
     <!-- Card to display result -->
-    <div id="resultCard" class="mt-6 hidden bg-gray-800 p-4 rounded-lg shadow-md">
-      <h2 class="text-xl font-bold text-white">Job Details</h2>
-      <p class="text-white"><strong>Skills Required:</strong> <span id="cardSkills"></span></p>
-      <p class="text-white"><strong>Expected Salary:</strong> <span id="cardSalary"></span></p>
-      <p class="text-white"><strong>Minimum Experience:</strong> <span id="cardExperience"></span></p>
-      
-    </div>
+   
   
     <script>
       document.addEventListener('DOMContentLoaded', () => {
-        const skillInput = document.getElementById('skillInput');
-        const addSkillButton = document.getElementById('addSkill');
-        const skillsContainer = document.getElementById('skillsContainer');
-        const jobForm = document.getElementById('jobForm');
-        const skillsField = document.getElementById('id_skills_required'); // Django's default ID for form fields
-    
-        let skills = [];
-    
-        addSkillButton.addEventListener('click', () => {
-            const skill = skillInput.value.trim();
-            if (skill && !skills.includes(skill)) {
-                skills.push(skill);
-                
-               
-    
-                const skillItem = document.createElement('div');
-                skillItem.className = 'flex items-center space-x-2';
-                skillItem.innerHTML = `
-                    <span class="text-sm text-gray-400">${skill}</span>
-                    <button type="button" class="text-red-500 hover:text-red-700">Remove</button>
-                `;
-    
-                const removeButton = skillItem.querySelector('button');
-                removeButton.addEventListener('click', () => {
-                    skills = skills.filter(s => s !== skill);
-                    skillsContainer.removeChild(skillItem);
-                    skillsField.value = JSON.stringify(skills);
-                });
-    
-                skillsContainer.appendChild(skillItem);
-                skillInput.value = '';
-                skillsField.value = JSON.stringify(skills);
-            } else if (skills.includes(skill)) {
-                alert('Skill already exists!');
-            }
-        });
-    });
-    
-    </script>
+          const skillInput = document.getElementById('skillInput');
+          const addSkillButton = document.getElementById('addSkill');
+          const skillsContainer = document.getElementById('skillsContainer');
+          const skillsField = document.getElementById('skillsField'); // Corrected ID
+      
+          let skills = [];
+      
+          addSkillButton.addEventListener('click', () => {
+              const skill = skillInput.value.trim();
+              if (skill && !skills.includes(skill)) {
+                  skills.push(skill);
+      
+                  const skillItem = document.createElement('div');
+                  skillItem.className = 'flex items-center space-x-2';
+                  skillItem.innerHTML = `
+                      <span class="text-sm text-gray-400">${skill}</span>
+                      <button type="button" class="text-red-500 hover:text-red-700 remove-skill">Remove</button>
+                  `;
+      
+                  const removeButton = skillItem.querySelector('.remove-skill');
+                  removeButton.addEventListener('click', () => {
+                      skills = skills.filter(s => s !== skill);
+                      skillsContainer.removeChild(skillItem);
+                      updateHiddenField();
+                  });
+      
+                  skillsContainer.appendChild(skillItem);
+                  skillInput.value = '';
+      
+                  updateHiddenField();
+              } else if (skills.includes(skill)) {
+                  alert('Skill already exists!');
+              }
+          });
+      
+          function updateHiddenField() {
+              skillsField.value = JSON.stringify(skills); 
+              console.log("wow " , skillsField.value)
+              // Store skills as JSON string
+          }
+      });
+      </script>
+      
   </div>
 {% endblock %}

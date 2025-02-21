@@ -18,16 +18,22 @@
             <div class="bg-gray-700 p-4 rounded-lg shadow-md relative">
               <h3 class="text-md text-white font-bold">{{ forloop.counter }} 💼 {{ job.title }}</h3>
               <p class="text-sm text-gray-400 mt-2">📄 Job Details: {{ job.job_details }}</p>
-              <p class="text-sm text-gray-400">🛠 Required Skills: {{ job.skill_required }}</p>
+              <p class="text-sm text-gray-400">🛠 Required Skills: 
+
+                {% for skill in job.skills_required %}
+                  <span class="bg-gray-600 text-white px-2 py-1 rounded-md text-sm">{{ skill }}</span>
+                {% endfor %}
+
+              </p>
               <p class="text-sm text-gray-400">💰 Expected Salary: ₹{{ job.expected_salary }}</p>
               <p class="text-sm text-gray-400">📅 Minimum Experience: {{ job.minimum_experience }} years</p>
               <div class="mt-4 flex justify-between">
-                <a href="{% url 'myadmin:updateJob' job.id %}">
+                {% comment %} <a href="{% url 'myadmin:updateJob' job.id %}">
                   <button id="edit" class="px-3 py-1 bg-yellow-500 text-white text-sm rounded-md hover:bg-yellow-600">Edit ✏️</button>
-                </a>
-                <a href="{% url 'myadmin:deleteJob' job.id %}">
+                </a> {% endcomment %}
+                {% comment %} <a href="{% url 'myadmin:deleteJob' job.id %}">
                   <button class="px-3 py-1 bg-red-500 text-white text-sm rounded-md hover:bg-red-600" onclick="deleteJob('{{ job.title }}')">Delete 🗑️</button>
-                </a>
+                </a> {% endcomment %}
               </div>
             </div>
           {% endfor %}

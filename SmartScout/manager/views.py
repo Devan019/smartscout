@@ -20,7 +20,7 @@ def generateRecruitmentForm(req):
       form.save()
       print("saved")
       return redirect("manager:readForms")
-    print(":not valid")
+    print(":not valid ", form)
     
   # form = RecruitmentForm()
   return render(req,'manager/generateRecruitmentForm.html')
