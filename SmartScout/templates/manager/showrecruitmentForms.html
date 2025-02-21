@@ -28,7 +28,7 @@
               <p class="text-sm text-gray-400">💰 Expected Salary: ₹{{ job.expected_salary }}</p>
               <p class="text-sm text-gray-400">📅 Minimum Experience: {{ job.minimum_experience }} years</p>
               <div class="mt-4 flex justify-between">
-                {% comment %} <a href="{% url 'myadmin:updateJob' job.id %}">
+                {% comment %} <a href="{% url 'manager:upadteForm' job.id %}">
                   <button id="edit" class="px-3 py-1 bg-yellow-500 text-white text-sm rounded-md hover:bg-yellow-600">Edit ✏️</button>
                 </a> {% endcomment %}
                 {% comment %} <a href="{% url 'myadmin:deleteJob' job.id %}">

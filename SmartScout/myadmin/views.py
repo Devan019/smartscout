@@ -58,12 +58,12 @@ def updateManager(req,id=0):
   if(req.method == "POST"):
     print("post ma")
     form = ManagerForm(req.POST,instance=manager)
-    print(form)
+    # print(form)
     if form.is_valid():
       form.save()
       print('saved')
     return redirect("myadmin:panel")
-  print('manager' , manager)
+  # print('manager' , manager)
   return render(req,'myadmin/add_manager_form.html',{'manager':manager})
  
 @login_required
