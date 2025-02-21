@@ -45,5 +45,11 @@ def doDeactivate(req, id):
   form.save()
   return redirect("manager:readForms")
 
+@login_required
+def doActivate(req, id):
+  form = get_object_or_404(RecruitmentModel, id)
+  form.form_status = Status.ACTIVE
+  form.save()
+  return redirect("manager:readForms")
   
   

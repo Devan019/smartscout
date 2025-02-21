@@ -24,5 +24,6 @@ urlpatterns = [
     path('forms/',views.getRecruitmentForm, name="readForms"),
     path("forms/create/",views.generateRecruitmentForm , name="genarateForm"),
     path('forms/deactivate', views.doDeactivate, name="deactivate"),
+    path('forms/activate', views.doActivate, name="activate"),
     # path('forms/create/', views.generateRecruitmentForm, name="upadteForm")
 ]
