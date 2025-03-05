@@ -1,6 +1,8 @@
 from django.db import models
 from django.forms import ValidationError
 
+from myadmin.models import Manager
+
 # Create your models here.
 def validate_non_empty_list(value):
     if not isinstance(value, list) or len(value) < 1:
@@ -12,6 +14,7 @@ class Status(models.TextChoices):
     INACTIVE = "False", "Inactive"
 
 class RecruitmentModel(models.Model):
+    manager = models.ForeignKey(Manager, on_delete=models.CASCADE, related_name="recruitments",blank=True, null=True)
     job_details = models.TextField(blank=False, null=False)
     skills_required = models.JSONField(default=list,validators=[validate_non_empty_list])
     expected_salary = models.IntegerField(blank=False, null=False)
