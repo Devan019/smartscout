@@ -9,7 +9,7 @@ class Manager(models.Model):
     contact = models.CharField(max_length=15, null=False, blank=False)
 
     def __str__(self):
-        return self.name
+        return str(self.id) + ' ' + self.name
 
 class ManagerAuth(models.Model):
     manager = models.ForeignKey(Manager, on_delete=models.CASCADE, name="mid")

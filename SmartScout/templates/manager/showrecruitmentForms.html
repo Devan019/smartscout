@@ -14,9 +14,8 @@
       <div class="bg-gray-800 p-6 rounded-lg shadow-md mb-6 relative">
         <h2 class="text-lg font-bold mb-4 text-white">Current Job Openings 🚀 Activate</h2>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {% for job in jobs %}
+          {% for job in active_jobs %}
 
-            {% if job.form_status %}
                 <div class="bg-gray-700 p-4 rounded-lg shadow-md relative flex flex-col h-full">
                   <h3 class="text-md text-white font-bold">{{ forloop.counter }} 💼 {{ job.title }}</h3>
                   <p class="text-sm text-gray-400 mt-2">📄 Job Details: {{ job.job_details }}</p>
@@ -30,24 +29,27 @@
               
                   <!-- Button Container pushed to bottom -->
                   <div class="mt-auto flex justify-between">
-                      {% comment %} 
-                      <a href="{% url 'myadmin:updateJob' job.id %}">
-                          <button id="edit" class="px-3 py-1 bg-yellow-500 text-white text-sm rounded-md hover:bg-yellow-600">
-                              Edit ✏️
-                          </button>
-                      </a> 
-                      {% endcomment %}
-              
-                      <a href="{% url 'manager:deactivate' job.id %}"> 
+                    
+                    <a href="{% url 'manager:deactivate' job.id %}"> 
                       <div class="mt-auto flex justify-end">
                         <button class="px-3 py-1 bg-red-500 text-white text-sm rounded-md hover:bg-red-600">
-                            Deactivate
+                          Deactivate
                         </button>
-                    </div>
-                      </a> 
+                      </div>
+                    </a> 
+                    <a href="{% url 'manager:updateForm' job.id %}">
+                        <button id="edit" class="px-3 py-1 bg-yellow-500 text-white text-sm rounded-md hover:bg-yellow-600">
+                            Edit ✏️
+                        </button>
+                    </a> 
+                    <form action="{% url 'manager:deleteForm' job.id %}" method="POST" onsubmit="return confirmDelete(event)">
+                      {% csrf_token %}
+                      <button type="submit" class="px-3 py-1 bg-red-500 text-white text-sm rounded-md hover:bg-red-600">
+                          Delete 🗑️
+                      </button>
+                  </form>
                   </div>
               </div>
-            {% endif %}
           {% endfor %}
         </div>
       </div>
@@ -55,9 +57,8 @@
       <div class="bg-gray-800 p-6 rounded-lg shadow-md mb-6 relative">
         <h2 class="text-lg font-bold mb-4 text-white">Deactivated Forms</h2>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {% for job in jobs %}
+          {% for job in deactivated_jobs %}
 
-            {% if job.form_status == False %}
                 <div class="bg-gray-700 p-4 rounded-lg shadow-md relative flex flex-col h-full">
                   <h3 class="text-md text-white font-bold">{{ forloop.counter }} 💼 {{ job.title }}</h3>
                   <p class="text-sm text-gray-400 mt-2">📄 Job Details: {{ job.job_details }}</p>
@@ -71,13 +72,7 @@
               
                   <!-- Button Container pushed to bottom -->
                   <div class="mt-auto flex justify-between">
-                      {% comment %} 
-                      <a href="{% url 'myadmin:updateJob' job.id %}">
-                          <button id="edit" class="px-3 py-1 bg-yellow-500 text-white text-sm rounded-md hover:bg-yellow-600">
-                              Edit ✏️
-                          </button>
-                      </a> 
-                      {% endcomment %}
+                      
               
                       <a href="{% url 'manager:activate' job.id %}"> 
                       <div class="mt-auto flex justify-end">
@@ -86,9 +81,19 @@
                         </button>
                     </div>
                       </a> 
+                      <a href="{% url 'manager:updateForm' job.id %}">
+                        <button id="edit" class="px-3 py-1 bg-yellow-500 text-white text-sm rounded-md hover:bg-yellow-600">
+                            Edit ✏️
+                        </button>
+                    </a> 
+                    <form action="{% url 'manager:deleteForm' job.id %}" method="POST" onsubmit="return confirmDelete(event)">
+                      {% csrf_token %}
+                      <button type="submit" class="px-3 py-1 bg-red-500 text-white text-sm rounded-md hover:bg-red-600">
+                          Delete 🗑️
+                      </button>
+                  </form>
                   </div>
               </div>
-            {% endif %}
           {% endfor %}
         </div>
       </div>
@@ -123,11 +128,15 @@
         maxDistance: 24.0
       });
       
-      function deleteJob(title) {
-        if (confirm(`Are you sure you want to delete the job: ${title}?`)) {
-          alert(`${title} has been deleted. 🗑️`);
+        function confirmDelete(event) {
+            if (!confirm("Are you sure you want to delete this job? This action cannot be undone.")) {
+                event.preventDefault();  // Prevent form submission if the user cancels
+            }
         }
-      }
+    
+
+
+
     </script>
   </div>
 {% endblock %}
