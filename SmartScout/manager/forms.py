@@ -9,7 +9,7 @@ def validate_non_empty_list(value):
 class  RecruitmentForm(forms.ModelForm): 
     job_details = forms.CharField(
         required=True, 
-        widget=forms.Textarea(attrs={"rows": 4, "cols": 40})  # Optional: Customize textarea size
+        widget=forms.Textarea(attrs={"rows": 4, "cols": 40}) 
     )
     skills_required = forms.JSONField(initial=list, validators=[validate_non_empty_list])
     expected_salary = forms.IntegerField(required=True)

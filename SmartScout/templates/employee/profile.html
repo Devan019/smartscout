@@ -1,0 +1,98 @@
+{% extends 'index.html' %}
+
+{% block title %}
+  Candidate Form
+{% endblock %}
+
+{% block content %}
+  {% if user.role == 'employee' %}
+    {% include 'employee/nav.html' %}
+
+
+    <div class="main min-h-screen bg-gray-900 text-white flex flex-col items-center p-8">
+      <div class="w-full max-w-3xl bg-gray-900 rounded-lg shadow-lg p-6">
+        <div class="flex flex-col items-center">
+          <div class="w-28 h-28 border-4 border-blue-500 rounded-full overflow-hidden">
+            <img src="{{ profile.profile_pic.url }}" alt="Profile Picture" class="w-full h-full object-cover" />
+          </div>
+          <h2 class="mt-4 text-2xl font-bold">{{ profile.name }}</h2>
+          <p class="text-gray-400">{{ profile.email }}</p>
+        </div>
+
+        <div class="mt-6 grid grid-cols-2 gap-6">
+          <div class="flex flex-col">
+            <span class="text-gray-500 text-sm">Full Name</span>
+            <p class="text-lg font-semibold">{{ profile.name }}</p>
+          </div>
+
+          <div class="flex flex-col">
+            <span class="text-gray-500 text-sm">Phone</span>
+            <p class="text-lg font-semibold">{{ profile.phone }}</p>
+          </div>
+
+          <div class="flex flex-col">
+            <span class="text-gray-500 text-sm">Main Interest</span>
+            <p class="text-lg font-semibold">{{ profile.main_interest }}</p>
+          </div>
+
+          <div class="flex flex-col">
+            <span class="text-gray-500 text-sm">CPI</span>
+            <p class="text-lg font-semibold">{{ profile.cpi }}</p>
+          </div>
+
+          <div class="flex flex-col">
+            <span class="text-gray-500 text-sm">University</span>
+            <p class="text-lg font-semibold">{{ profile.university }}</p>
+          </div>
+
+          <div class="flex flex-col">
+            <span class="text-gray-500 text-sm">Experience</span>
+            <p class="text-lg font-semibold">{{ profile.experience }} years</p>
+          </div>
+
+          <div class="col-span-2">
+            <span class="text-gray-500 text-sm">Skills</span>
+            <div class="flex flex-wrap gap-2 mt-2">
+              {% for skill in profile.skills_required %}
+                <span class="bg-blue-600 px-3 py-1 rounded-full text-sm">{{ skill }}</span>
+              {% endfor %}
+            </div>
+          </div>
+
+          <div class="col-span-2">
+            <span class="text-gray-500 text-sm">Resume</span>
+            <a href="{{ profile.resume.url }}" target="_blank" class="mt-2 inline-block bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-semibold transition duration-300 shadow-md">Download Resume 📄</a>
+          </div>
+        </div>
+
+        <!-- Edit Profile Button -->
+        {% comment %} <div class="mt-6 text-center">
+          <a href="{% url 'edit_profile' %}" class="bg-gray-700 hover:bg-gray-600 text-white px-6 py-3 rounded-lg font-bold transition duration-300">Edit Profile ✏️</a>
+        </div> {% endcomment %}
+      </div>
+    </div>
+
+    {% include 'include/footer.html' %}
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/110/three.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/vanta/0.5.24/vanta.net.min.js"></script>
+      <script>
+        VANTA.NET({
+          el: '.main',
+          mouseControls: true,
+          touchControls: true,
+          gyroControls: false,
+          minHeight: 200.0,
+          minWidth: 200.0,
+          scale: 1.0,
+          scaleMobile: 1.0,
+          color: 0x3b82f6,
+          backgroundColor: 0x121212,
+          points: 20.0,
+          maxDistance: 24.0
+        })
+      </script>
+  {% else %}
+    {% include 'include/404.html' %}
+  {% endif %} 
+{% endblock %}

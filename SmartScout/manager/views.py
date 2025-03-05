@@ -1,4 +1,5 @@
 from django.shortcuts import get_object_or_404, redirect, render
+from rich import _console
 from .models import RecruitmentModel, Status
 from .forms import RecruitmentForm
 from django.contrib.auth.decorators import login_required
@@ -10,12 +11,13 @@ def home(req):
 
 @login_required
 def generateRecruitmentForm(req, id = 0):
+
   print("i ")
-  reqform = get_object_or_404(RecruitmentModel, id)
+  # reqform = get_object_or_404(RecruitmentModel, id)
   if req.method == 'POST':
     form = RecruitmentForm(req.POST)
     print("in post")
-    exitform = RecruitmentForm(req.POST, instance=reqform)
+    # exitform = RecruitmentForm(req.POST, instance=reqform)
   
     if form.is_valid():
       print("valid ")
@@ -26,9 +28,9 @@ def generateRecruitmentForm(req, id = 0):
     
     print(":not valid ", form)
     
-  # form = RecruitmentForm()
+  form = RecruitmentForm()
   return render(req,'manager/generateRecruitmentForm.html',{
-    form: exitform
+    'form': form
   })
 
 @login_required
