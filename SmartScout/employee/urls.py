@@ -22,5 +22,5 @@ app_name = 'employee'
 
 urlpatterns = [
     path('',home,name="home"),
-    path('create/', getForm, name="createCandidate")
+    path('create/', getForm, name="createCandidate"),
 ]

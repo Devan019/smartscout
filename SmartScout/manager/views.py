@@ -23,6 +23,8 @@ def generateRecruitmentForm(req, id = 0):
       recruitment.save()
       print("saved")
       return redirect("manager:readForms")
+    else:
+      print(form.error_class)
     
     
     print(":not valid ")

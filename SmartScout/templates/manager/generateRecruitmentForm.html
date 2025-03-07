@@ -25,7 +25,7 @@
               </defs>
               <rect fill="url(#766323e1-e594-4ffd-a688-e7275079d540)" width="52" height="24"></rect>
             </svg>
-            <div class="bg-zinc-950 text-white relative bg-white rounded shadow-2xl p-7 sm:p-10 h-full">
+            <div class="bg-zinc-950 text-white relative rounded shadow-2xl p-7 sm:p-10 h-full">
               <h3 class="mb-4 text-xl font-semibold sm:text-center sm:mb-6 sm:text-2xl">
                 Job Details Form
               </h3>
@@ -46,7 +46,6 @@
                  {% csrf_token %}
 
 
-                <input type="hidden" name="skills_required" id="skillsField">
 
 
                 <div class="mb-4">
@@ -110,7 +109,6 @@
     <script>
       document.addEventListener('DOMContentLoaded', async () => {
           const skillInput = document.getElementById('skillInput');
-          const addSkillButton = document.getElementById('addSkill');
           const skillsContainer = document.getElementById('skillsContainer');
           const skillsField = document.getElementById('skillsField'); 
           const autoSuggestContainer = document.getElementById('autoSuggestContainer');
@@ -166,10 +164,7 @@
           });
       
           // Add skill from input
-          addSkillButton.addEventListener('click', () => {
-              const skill = skillInput.value.trim();
-              addSkill(skill);
-          });
+          
       
           function addSkill(skill) {
               if (skill && availableSkills.includes(skill) && !skills.includes(skill)) {
@@ -191,7 +186,6 @@
                   skillsContainer.appendChild(skillItem);
                   skillInput.value = '';
                   autoSuggestContainer.classList.add('hidden');
-      
                   updateHiddenField();
               } else {
                   alert(skill ? "Invalid or duplicate skill!" : "Enter a skill.");

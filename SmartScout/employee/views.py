@@ -1,15 +1,16 @@
 from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib.auth.decorators import login_required
+from manager.models import RecruitmentModel
 from employee.models import Profile
 from employee.forms import ProfileForm
 
 # Create your views here.
+@login_required
 def home(req):
   return render(req,"employee/home.html")
 
+@login_required
 def getForm(req):
-
-  
   if(req.method == 'POST'):
 
     form = ProfileForm(req.POST, req.FILES)
@@ -36,5 +37,3 @@ def getForm(req):
   return render(req,"employee/createCandidate.html")
 
 
-
-  
