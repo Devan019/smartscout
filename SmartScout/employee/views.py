@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 from manager.models import RecruitmentModel
 from employee.models import Profile
 from employee.forms import ProfileForm
+from manager.models import RecruitmentModel, Status
 
 # Create your views here.
 @login_required
@@ -36,4 +37,15 @@ def getForm(req):
     return render(req,"employee/createCandidate.html")
   return render(req,"employee/createCandidate.html")
 
+def getJobs(req):
+  jobs = RecruitmentModel.objects.all()
+  active_jobs = []
+  for job in jobs:
+   if job.form_status == True:
+     active_jobs.append(job)
 
+  return render(req,"employee/jobs.html",{
+    'jobs' : active_jobs
+  })
+
+  

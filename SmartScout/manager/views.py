@@ -19,7 +19,11 @@ def generateRecruitmentForm(req, id = 0):
     if form.is_valid():
       print("valid "+str(req.user.id) + req.user.username)
       recruitment = form.save(commit=False)  
-      recruitment.manager = Manager.objects.get(id=req.user.id)
+      print( req.user.id, req.user.email)
+      # manager = get_object_or_404(Manager, emailid = req.user.email)
+      manager = Manager.objects.get(emailid = req.user.email)
+      recruitment = form.save(commit=False)
+      recruitment.manager = manager
       recruitment.save()
       print("saved")
       return redirect("manager:readForms")
@@ -38,7 +42,7 @@ def generateRecruitmentForm(req, id = 0):
 def getRecruitmentForm(req):
     # Ensure req.user is a Manager instance
     try:
-      manager = Manager.objects.get(id=req.user.id)
+      manager = Manager.objects.get(emailid=req.user.email)
     except Manager.DoesNotExist:
         manager = None  # Handle the case where the user is not a manager
 
@@ -80,7 +84,7 @@ def updateRecruitmentForm(req,id):
       print("form updated")
       skills_data = form.cleaned_data.get('skills_required', [])
 
-      recobj.manager = Manager.objects.get(id=req.user.id)
+      recobj.manager = Manager.objects.get(emailid=req.user.email)
 
       recobj.skills_required = skills_data
 

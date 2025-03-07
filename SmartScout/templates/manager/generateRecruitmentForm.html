@@ -46,6 +46,7 @@
                  {% csrf_token %}
 
 
+              
 
 
                 <div class="mb-4">
@@ -163,9 +164,7 @@
               }
           });
       
-          // Add skill from input
-          
-      
+         
           function addSkill(skill) {
               if (skill && availableSkills.includes(skill) && !skills.includes(skill)) {
                   skills.push(skill);
@@ -196,7 +195,7 @@
               skillsField.value = JSON.stringify(skills);
           }
       });
-      </script>
+    </script>
     
       
   </div>

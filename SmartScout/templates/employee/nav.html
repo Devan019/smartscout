@@ -12,9 +12,7 @@
 
         {% if user.id %}
           <a href="{% url 'employee:createCandidate' %}" class="hover:text-blue-400 px-3 py-2 rounded-md text-sm font-medium">Profile</a>
-
-          <a href="{% url 'myauth:jobLists' %}" class="hover:text-blue-400 px-3 py-2 rounded-md text-sm font-medium">Job Apply Lists</a>
-          
+          <a href="{% url 'employee:jobs' %}" class="hover:text-blue-400 px-3 py-2 rounded-md text-sm font-medium">Jobs </a>
           <a href="{% url 'myauth:logout' %}" class="hover:text-blue-400 px-3 py-2 rounded-md text-sm font-medium">Logout</a>
         {% else %}
           <a href="#" class="hover:text-blue-400 px-3 py-2 rounded-md text-sm font-medium">Login</a>
