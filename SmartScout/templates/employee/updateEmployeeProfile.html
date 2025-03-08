@@ -49,6 +49,17 @@
                 <span class="mt-2 text-gray-400 text-sm">Upload Profile Picture</span>
               </label>
             </div>
+
+            <div class="flex flex-col col-span-2">
+              <label for="resume" class="text-sm font-medium">Resume</label>
+              <input  type="file" name="resume" id="resume" class="resumeUpload bg-[#252525] text-white px-4 py-3 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"/>
+          
+              {% if data.resume %}
+                  <a href="{{ data.resume.url }}" target="_blank" class="text-blue-400 mt-2 underline">
+                      View Uploaded Resume
+                  </a>
+              {% endif %}
+            </div>
           
             <div class="grid grid-cols-2 gap-6">
               <!-- Name -->
@@ -66,13 +77,13 @@
               <!-- Email -->
               <div class="flex flex-col">
                 <label for="email" class="text-sm font-medium">Email</label>
-                <input type="email" name="email" id="email" class="bg-[#252525] border border-gray-600 rounded-lg px-4 py-2 focus:ring-blue-500 focus:border-blue-500 outline-none" placeholder="Type your email..." value={{user.email}} readonly  />
+                <input type="email" name="email" id="email" class="email bg-[#252525] border border-gray-600 rounded-lg px-4 py-2 focus:ring-blue-500 focus:border-blue-500 outline-none" placeholder="Type your email..." value={{user.email}} readonly  />
               </div>
           
               <!-- Phone -->
               <div class="flex flex-col">
                 <label for="phone" class="text-sm font-medium">Phone</label>
-                <input type="tel" pattern="[0-9]{10}" value={{data.phone}} name="phone" id="phone" class="bg-[#252525] border border-gray-600 rounded-lg px-4 py-2 focus:ring-blue-500 focus:border-blue-500 outline-none" placeholder="Type your contact no..." required />
+                <input type="tel" pattern="[0-9]{10}" value={{data.phone}} name="phone" id="phone" class="phone bg-[#252525] border border-gray-600 rounded-lg px-4 py-2 focus:ring-blue-500 focus:border-blue-500 outline-none" placeholder="Type your contact no..." required />
               </div>
           
               <!-- Main Interest -->
@@ -126,16 +137,7 @@
               </div>
           
               <!-- Resume Upload -->
-              <div class="flex flex-col col-span-2">
-                <label for="resume" class="text-sm font-medium">Resume</label>
-                <input type="file" name="resume" id="resume" class="bg-[#252525] text-white px-4 py-3 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"/>
-            
-                {% if data.resume %}
-                    <a href="{{ data.resume.url }}" target="_blank" class="text-blue-400 mt-2 underline">
-                        View Uploaded Resume
-                    </a>
-                {% endif %}
-            </div>
+              
             </div>
           
             
@@ -185,6 +187,9 @@
 
       <script>
         document.addEventListener('DOMContentLoaded', async () => {
+
+          
+
             const skillInput = document.getElementById('skillInput');
             const addSkillButton = document.getElementById('addSkill');
             const skillsContainer = document.getElementById('skillsContainer');
@@ -202,6 +207,35 @@
                         
             async function main()
             {
+                document.querySelector('.resumeUpload').addEventListener('change', function() {
+                  const file = this.files[0];
+                  if (file) {
+                    const formData = new FormData();
+                    formData.append('resume', file);
+            
+                    fetch("{% url 'employee:upload_resume' %}", {
+                        method: 'POST',
+                        body: formData,
+                        headers: {
+                            'X-CSRFToken': '{{ csrf_token }}'
+                        }
+                    })
+                    .then(response => response.json())
+                    .then(data =>{
+                      console.log(data)
+                      skills = data.skills;
+                      skills.forEach(skill=>{
+                        addSkill(skill, true)
+                        updateHiddenField();
+                      })
+
+                      document.querySelector(".email").value = data.email;
+                      document.querySelector(".phone").value = data.contact;
+                      
+                    })
+                    .catch(error => console.error("Error extracting resume data:", error));
+                  }
+            });
                 
                 try {
                     skills = JSON.parse(skills.replace(/'/g, '"')); 
@@ -294,7 +328,7 @@
             }
         main()
         });
-        </script>
+      </script>
       
     </div>
   {% else %}

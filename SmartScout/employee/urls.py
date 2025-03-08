@@ -16,7 +16,8 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.urls import path
-from .views import home, getForm, getJobs, updateProfile
+
+from .views import home, getForm, getJobs, updateProfile, upload_resume
 
 app_name = 'employee'
 
@@ -25,5 +26,6 @@ urlpatterns = [
     path('create/', getForm, name="createCandidate"),
     path('jobs/', getJobs, name="jobs"),
     path('update/<int:id>/', updateProfile, name="updateProfile"),
+    path("scanpdf/" ,upload_resume, name="upload_resume")
     
 ]

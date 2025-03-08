@@ -1,9 +1,11 @@
+from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib.auth.decorators import login_required
 from manager.models import RecruitmentModel
 from employee.models import Profile
 from employee.forms import ProfileForm
 from manager.models import RecruitmentModel
+from .pdfScan import process_resume
 
 # Create your views here.
 @login_required
@@ -69,3 +71,19 @@ def updateProfile(req, id):
     
     form = ProfileForm(instance=empobj)
     return render(req, 'employee/updateEmployeeProfile.html', {'form': form, 'data': empobj})
+
+
+
+def upload_resume(request):
+    if request.method == "POST" and request.FILES.get("resume"):
+        uploaded_file = request.FILES["resume"]
+        extracted_data = process_resume(uploaded_file)
+        
+        if extracted_data:
+            return JsonResponse({
+                "skills": extracted_data["skills"],
+                "contact": extracted_data["contact"][0] if extracted_data["contact"] else "",
+                "email": extracted_data["email"][0] if extracted_data["email"] else "",
+            })
+    
+    return JsonResponse({"error": "Invalid file or extraction failed."})

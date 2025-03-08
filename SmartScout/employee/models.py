@@ -4,7 +4,7 @@ from django.db import models
 
 from manager.forms import validate_non_empty_list
 from myauth.models import CustomUser
-from smartscout.manager.models import RecruitmentModel
+from manager.models import RecruitmentModel
 
 class Profile(models.Model):
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, related_name="user_id", blank=True , null = True)
@@ -26,6 +26,6 @@ class CandidateApplicationModel(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE ,related_name="user")
     recruiment = models.ForeignKey(RecruitmentModel, on_delete=models.CASCADE, related_name="recruitment")
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name="profile")
-    apply_date = models.DateField(default=timezone.now().date())
+    # apply_date = models.DateField(default=timezone.now().date())
     def __str__(self):
         return self.user.username + " " + self.recruiment.manager.name
