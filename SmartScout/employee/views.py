@@ -37,6 +37,7 @@ def getForm(req):
     return render(req,"employee/createCandidate.html")
   return render(req,"employee/createCandidate.html")
 
+@login_required
 def getJobs(req):
   jobs = RecruitmentModel.objects.all()
   active_jobs = []
@@ -47,5 +48,22 @@ def getJobs(req):
   return render(req,"employee/jobs.html",{
     'jobs' : active_jobs
   })
+
+@login_required
+def applyJobs(req, jobid):
+  try:
+    print("in try")
+    profile = get_object_or_404(Profile, email= req.user.email)
+    print(profile , " got it")
+    job = get_object_or_404(RecruitmentModel, id=jobid)
+    return render(req, "employee/applyjob.html",{
+      'profile': profile,
+      'job' : job
+    })
+  except:
+    return redirect('employee:home')
+
+
+
 
   

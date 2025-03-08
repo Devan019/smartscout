@@ -53,7 +53,9 @@
             </div>
             
             <button class="mt-5 bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-6 rounded-md transition-colors duration-200">
-              Apply Now
+              <a href="{% url 'employee:applyjobs' job.id %}">
+                Apply Now
+              </a>
             </button>
           </div>
           {% endfor %}

@@ -20,7 +20,6 @@ def generateRecruitmentForm(req, id = 0):
       print("valid "+str(req.user.id) + req.user.username)
       recruitment = form.save(commit=False)  
       print( req.user.id, req.user.email)
-      # manager = get_object_or_404(Manager, emailid = req.user.email)
       manager = Manager.objects.get(emailid = req.user.email)
       recruitment = form.save(commit=False)
       recruitment.manager = manager

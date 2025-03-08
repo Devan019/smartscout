@@ -16,9 +16,11 @@ class  ProfileForm(forms.ModelForm):
     cpi = forms.FloatField(required=True)
     university = forms.CharField(required=True)
     skills_required = forms.JSONField(initial=list, validators=[validate_non_empty_list])
-    experience = forms.IntegerField(required=True)
+    experience = forms.IntegerField(required=False)
     resume = forms.FileField(required=True)
 
     class Meta:
         model = models.Profile
         fields = "__all__"
+
+
