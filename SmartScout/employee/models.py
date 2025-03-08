@@ -16,6 +16,7 @@ class Profile(models.Model):
     cpi = models.FloatField(blank=True, null=True)
     university = models.CharField(max_length=255, blank=True, null=True)
     skills_required = models.JSONField(default=list,validators=[validate_non_empty_list])
+    experience = models.IntegerField(blank=True,null=True)
     resume = models.FileField(upload_to='media/resumes/', blank=False)
     experience = models.IntegerField(blank=True)
     def __str__(self):
