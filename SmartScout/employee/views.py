@@ -1,9 +1,10 @@
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib.auth.decorators import login_required
+from myauth.models import CustomUser
 from manager.models import RecruitmentModel
-from employee.models import Profile
-from employee.forms import ProfileForm
+from .models import CandidateApplicationModel, Profile
+from .forms import ProfileForm
 from manager.models import RecruitmentModel
 from .pdfScan import process_resume
 
@@ -42,11 +43,12 @@ def getJobs(req):
   jobs = RecruitmentModel.objects.all()
   active_jobs = []
   for job in jobs:
-   if job.form_status == True:
-     active_jobs.append(job)
-
+    if job.form_status == True:
+        active_jobs.append(job)
+    profileobj = get_object_or_404(Profile,user = req.user.id)
   return render(req,"employee/jobs.html",{
-    'jobs' : active_jobs
+    'jobs' : active_jobs,
+    'profile':profileobj
   })
 
 @login_required
@@ -73,7 +75,7 @@ def updateProfile(req, id):
     return render(req, 'employee/updateEmployeeProfile.html', {'form': form, 'data': empobj})
 
 
-
+@login_required
 def upload_resume(request):
     if request.method == "POST" and request.FILES.get("resume"):
         uploaded_file = request.FILES["resume"]
@@ -87,3 +89,24 @@ def upload_resume(request):
             })
     
     return JsonResponse({"error": "Invalid file or extraction failed."})
+
+
+@login_required
+def applyForJob(req,id):
+    recruitObj = get_object_or_404(RecruitmentModel,id = id)
+    
+    empObj = get_object_or_404(Profile, user=req.user.id)
+    jobObj = CandidateApplicationModel()
+    user = CustomUser.objects.get(pk=req.user.id)
+    jobObj.profile = empObj
+    print(jobObj.profile)
+    jobObj.user = user
+    print(jobObj.user)
+    
+    jobObj.recruiment = recruitObj
+    print(jobObj.recruiment)
+
+    jobObj.save()
+    if jobObj.id:
+        empObj.jobsApplied.add(recruitObj)
+    return redirect("employee:jobs")

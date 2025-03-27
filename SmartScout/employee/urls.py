@@ -17,7 +17,9 @@ Including another URLconf
 """
 from django.urls import path
 
-from .views import home, getForm, getJobs, updateProfile, upload_resume
+from .views import applyForJob, getForm, getJobs, home, updateProfile, upload_resume
+
+
 
 app_name = 'employee'
 
@@ -26,6 +28,7 @@ urlpatterns = [
     path('create/', getForm, name="createCandidate"),
     path('jobs/', getJobs, name="jobs"),
     path('update/<int:id>/', updateProfile, name="updateProfile"),
-    path("scanpdf/" ,upload_resume, name="upload_resume")
+    path("scanpdf/" ,upload_resume, name="upload_resume"),
+    path("applyJob/<int:id>/",applyForJob,name="applyJob"),
     
 ]

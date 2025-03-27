@@ -9,7 +9,7 @@ def load_skills_from_json(json_file):
         data = json.load(file)
         return set(data.get("skills", []))  
 
-skills_db = load_skills_from_json('C:\Major projects\SmartScout\smartscout\static\json\skill.json')
+skills_db = load_skills_from_json(os.getenv("AUTO_SCAN_PATH"))
 
 def extract_text_from_docx(docx_path):
     doc = Document(docx_path)
