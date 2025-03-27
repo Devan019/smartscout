@@ -96,6 +96,14 @@ def applyForJob(req,id):
     recruitObj = get_object_or_404(RecruitmentModel,id = id)
     
     empObj = get_object_or_404(Profile, user=req.user.id)
+    
+    required_fields = ['name', 'email', 'phone', 'resume','experience','university']
+    missing_fields = [field for field in required_fields if not getattr(empObj, field)]
+
+    if missing_fields:
+        return redirect("employee:update_profile")
+    
+    
     jobObj = CandidateApplicationModel()
     user = CustomUser.objects.get(pk=req.user.id)
     jobObj.profile = empObj
