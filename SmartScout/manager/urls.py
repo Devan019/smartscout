@@ -29,7 +29,6 @@ urlpatterns = [
     path('forms/activate/<int:id>/', views.doActivate, name="activate"),
     path('forms/update/<int:id>/', views.updateRecruitmentForm, name="updateForm"),
     path('forms/delete/<int:id>/', views.deleteRecruitmentForm, name="deleteForm"),
-    path('forms/applications/<int:id>', views.showApplications, name="applications"),
     path("application/<int:id>/",views.showProfile,name="viewApplication"),
     path('application/process/<int:application_id>/', views.process_application, name='process_application'),
     path('applications/<int:id>/',views.showsStatusApplications, name="getApplication"),

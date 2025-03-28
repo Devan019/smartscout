@@ -16,7 +16,7 @@
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {% for job in active_jobs %}
             <div class="bg-gray-700 p-4 rounded-lg shadow-md relative flex flex-col h-full">
-              <a href="{% url 'manager:applications' job.id %}"><button id="edit" class="float-right px-3 py-1 bg-blue-500 text-white text-sm rounded-md hover:bg-blue-600">Show applications</button></a>
+              
               <h3 class="text-md text-white font-bold">{{ forloop.counter }} 💼 {{ job.title }}</h3>
               <p class="text-sm text-gray-400 mt-2">📄 Job Details: {{ job.job_details }}</p>
               <p class="text-sm text-gray-400">

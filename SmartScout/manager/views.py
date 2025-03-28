@@ -110,82 +110,6 @@ def deleteRecruitmentForm(req,id):
   recobj.delete()
   return redirect('manager:readForms')
 
-@login_required
-def showApplications(request, id):
-    try:
-       
-        recruitment = RecruitmentModel.objects.get(id=id)
-       
-      
-        applications = CandidateApplicationModel.objects.filter(recruitment=recruitment)
-
-        
-        profiles_data = []
-        
-        for application in applications:
-            
-
-            required_skills = set(recruitment.skills_required)
-            profile_skills = set(application.profile.skills_required)
-            matched_skills = list(required_skills.intersection(profile_skills))
-            match_percentage = (len(matched_skills) / len(required_skills)) * 100 if required_skills else 0
-            
-            exp_diff = application.profile.experience - recruitment.minimum_experience
-            
-            profiles_data.append({
-                'app_id' : application.id,
-                'user_id': application.user.id,
-                'username': application.user.username,
-                'profile_id': application.profile.id,
-                'matched_skills': matched_skills,
-                'match_percentage': round(match_percentage, 2),
-                'experience_diff': exp_diff,
-                'profile_experience': application.profile.experience,
-                'required_experience': recruitment.minimum_experience,
-                'profile': application.profile, 
-                'status': application.status
-            })
-
-            
-
-        profiles_sorted_by_skills = sorted(
-            profiles_data,
-            key=lambda x: (-x['match_percentage'], -x['experience_diff'])
-        )
-
-        profiles_sorted_by_experience = sorted(
-            profiles_data,
-            key=lambda x: (-x['experience_diff'], -x['match_percentage'])
-        )
-
-        filter_type = request.GET.get('filter', 'all')
-    
-        if filter_type == 'skills':
-          profiles_data = profiles_sorted_by_skills 
-        elif filter_type == 'exp':
-          profiles_data = profiles_sorted_by_experience 
-        else:
-          profiles_data = profiles_data  
-        
-        
-        
-        
-        
-        context = {
-            'recruitment': recruitment,
-            'profiles': profiles_data,
-            'profiles_by_skills': profiles_sorted_by_skills,
-            'profiles_by_experience': profiles_sorted_by_experience,
-            'job_title': recruitment.job_details[:50] + '...' if recruitment.job_details else ''
-        }
-
-       
-        
-        return render(request, "manager/sortedProfiles.html", context)
-    
-    except RecruitmentModel.DoesNotExist:
-        return render(request, "404.html", status=404)
-
 
 @login_required
 def showProfile(req, id):
@@ -213,30 +137,9 @@ def process_application(request, application_id):
     application.save()
     return redirect("manager:applications",id=recruitment_id)
 
-@login_required
-def showsStatusApplications(req, id):
-   print(req.user.id)
-   manager = Manager.objects.get(emailid=req.user.email)
-   
-   recruitments = RecruitmentModel.objects.filter(manager=manager)
-   recruitment = get_object_or_404(RecruitmentModel, id=id)
-
-
-   print(recruitments , " get it")
-   return render(req,"manager/showApplicationsStatus.html",{
-      'recruitments': recruitments,
-      'current_recruitment' : recruitment
-   })
-
-@login_required
-def showsDeafultStatusApplications(req):
-  manager = Manager.objects.get(emailid=req.user.email)
-   
-  recruitments = RecruitmentModel.objects.filter(manager=manager)
-  recruitment = recruitments.first()
+def sedingObject(req,recruitment, recruitments):
   applications = CandidateApplicationModel.objects.filter(recruitment=recruitment)
-
-        
+      
   profiles_data = []
         
   for application in applications:
@@ -282,24 +185,35 @@ def showsDeafultStatusApplications(req):
   elif filter_type == 'exp':
     profiles_data = profiles_sorted_by_experience 
   else:
-    profiles_data = profiles_data  
-            
-  context = {
-      'recruitment': recruitment,
-      'profiles': profiles_data,
-      'profiles_by_skills': profiles_sorted_by_skills,
-      'profiles_by_experience': profiles_sorted_by_experience,
-      'job_title': recruitment.job_details[:50] + '...' if recruitment.job_details else ''
-  }
+    profiles_data = profiles_data
 
-       
-
-  print(recruitments , " get it")
   return render(req,"manager/showApplicationsStatus.html",{
      'recruitments': recruitments,
      'current_recruitment' : recruitment,
      'applications' : applications,
-     'context' : context
+     'recruitment': recruitment,
+      'profiles': profiles_data,
+      'profiles_by_skills': profiles_sorted_by_skills,
+      'profiles_by_experience': profiles_sorted_by_experience,
+      'job_title': recruitment.job_details[:50] + '...' if recruitment.job_details else ''
   })
 
+
+
+@login_required
+def showsStatusApplications(req, id):
+   print(req.user.id)
+   manager = Manager.objects.get(emailid=req.user.email)
+   
+   recruitments = RecruitmentModel.objects.filter(manager=manager)
+   recruitment = get_object_or_404(RecruitmentModel, id=id)
+   return sedingObject(req, recruitment, recruitments)
+
+@login_required
+def showsDeafultStatusApplications(req):
+  manager = Manager.objects.get(emailid=req.user.email)
+   
+  recruitments = RecruitmentModel.objects.filter(manager=manager)
+  recruitment = recruitments.first()
+  return sedingObject(req, recruitment, recruitments)
 
