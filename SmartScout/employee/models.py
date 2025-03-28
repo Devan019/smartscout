@@ -29,6 +29,7 @@ class CandidateApplicationModel(models.Model):
         ('ACCEPTED', 'Accepted'),
         ('REJECTED', 'Rejected'),
     ]
+    
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE ,related_name="user")
     recruitment = models.ForeignKey(RecruitmentModel, on_delete=models.CASCADE, related_name="recruitment")
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name="profile")

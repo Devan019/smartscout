@@ -1,15 +1,16 @@
 
-from django.http import JsonResponse
+from django.core.mail import EmailMessage
+from django.conf import settings
 from django.shortcuts import get_object_or_404, redirect, render
 
 from employee.models import CandidateApplicationModel, Profile
+from manager.accepted import get_acceptance_email
+from manager.rejection import get_rejection_email
 from .models import RecruitmentModel, Status
 from myadmin.models import Manager
 from .forms import RecruitmentForm
 from django.contrib.auth.decorators import login_required
-from django.core import serializers
-from django.http import JsonResponse
-import json
+
 # Create your views here.
 @login_required
 def home(req):
@@ -135,68 +136,63 @@ def process_application(request, application_id):
         application.status = 'PENDING'
     
     application.save()
-    return redirect("manager:applications",id=recruitment_id)
+    return redirect("manager:getApplication",id=recruitment_id)
 
-def sedingObject(req,recruitment, recruitments):
-  applications = CandidateApplicationModel.objects.filter(recruitment=recruitment)
-      
-  profiles_data = []
+def sendingObject(req, recruitment, recruitments):
+    applications = CandidateApplicationModel.objects.filter(recruitment=recruitment)
+    
+    profiles_data = []
+    
+    for application in applications:
+        required_skills = set(recruitment.skills_required)
+        profile_skills = set(application.profile.skills_required)
+        matched_skills = list(required_skills.intersection(profile_skills))
+        match_percentage = (len(matched_skills) / len(required_skills)) * 100 if required_skills else 0
         
-  for application in applications:
-            
+        exp_diff = application.profile.experience - recruitment.minimum_experience
+        
+        profiles_data.append({
+            'app_id': application.id,  
+            'user_id': application.user.id,
+            'username': application.user.username,
+            'profile_id': application.profile.id,
+            'matched_skills': matched_skills,
+            'match_percentage': round(match_percentage, 2),
+            'experience_diff': exp_diff,
+            'profile_experience': application.profile.experience,
+            'required_experience': recruitment.minimum_experience,
+            'profile': application.profile,
+            'status': application.status,
+            'application': application  # Include the full application object
+        })
 
-    required_skills = set(recruitment.skills_required)
-    profile_skills = set(application.profile.skills_required)
-    matched_skills = list(required_skills.intersection(profile_skills))
-    match_percentage = (len(matched_skills) / len(required_skills)) * 100 if required_skills else 0
+    # Sorting logic remains the same
+    profiles_sorted_by_skills = sorted(profiles_data, key=lambda x: (-x['match_percentage'], -x['experience_diff']))
+    profiles_sorted_by_experience = sorted(profiles_data, key=lambda x: (-x['experience_diff'], -x['match_percentage']))
+
+    # Filtering
+    filter_type = req.GET.get('filter', 'all')
+    status_filter = req.GET.get('status')
     
-    exp_diff = application.profile.experience - recruitment.minimum_experience
+    if filter_type == 'skills':
+        profiles_data = profiles_sorted_by_skills
+    elif filter_type == 'exp':
+        profiles_data = profiles_sorted_by_experience
     
-    profiles_data.append({
-        'app_id' : application.id,
-        'user_id': application.user.id,
-        'username': application.user.username,
-        'profile_id': application.profile.id,
-        'matched_skills': matched_skills,
-        'match_percentage': round(match_percentage, 2),
-        'experience_diff': exp_diff,
-        'profile_experience': application.profile.experience,
-        'required_experience': recruitment.minimum_experience,
-        'profile': application.profile, 
-        'status': application.status
+    if status_filter and status_filter.upper() in ['ACCEPTED', 'PENDING']:
+        profiles_data = [p for p in profiles_data if p['status'] == status_filter.upper()]
+
+    return render(req, "manager/showApplicationsStatus.html", {
+        'recruitments': recruitments,
+        'current_recruitment': recruitment,
+        'applications': applications,
+        'recruitment': recruitment,
+        'profiles': profiles_data,
+        'profiles_by_skills': profiles_sorted_by_skills,
+        'profiles_by_experience': profiles_sorted_by_experience,
+        'job_title': recruitment.job_details[:50] + '...' if recruitment.job_details else ''
     })
 
-            
-
-  profiles_sorted_by_skills = sorted(
-      profiles_data,
-      key=lambda x: (-x['match_percentage'], -x['experience_diff'])
-  )
-
-  profiles_sorted_by_experience = sorted(
-      profiles_data,
-      key=lambda x: (-x['experience_diff'], -x['match_percentage'])
-  )
-
-  filter_type = req.GET.get('filter', 'all')
-    
-  if filter_type == 'skills':
-    profiles_data = profiles_sorted_by_skills 
-  elif filter_type == 'exp':
-    profiles_data = profiles_sorted_by_experience 
-  else:
-    profiles_data = profiles_data
-
-  return render(req,"manager/showApplicationsStatus.html",{
-     'recruitments': recruitments,
-     'current_recruitment' : recruitment,
-     'applications' : applications,
-     'recruitment': recruitment,
-      'profiles': profiles_data,
-      'profiles_by_skills': profiles_sorted_by_skills,
-      'profiles_by_experience': profiles_sorted_by_experience,
-      'job_title': recruitment.job_details[:50] + '...' if recruitment.job_details else ''
-  })
 @login_required
 def showsStatusApplications(req, id):
    print(req.user.id)
@@ -204,7 +200,7 @@ def showsStatusApplications(req, id):
    
    recruitments = RecruitmentModel.objects.filter(manager=manager)
    recruitment = get_object_or_404(RecruitmentModel, id=id)
-   return sedingObject(req, recruitment, recruitments)
+   return sendingObject(req, recruitment, recruitments)
 
 @login_required
 def showsDeafultStatusApplications(req):
@@ -212,22 +208,59 @@ def showsDeafultStatusApplications(req):
    
   recruitments = RecruitmentModel.objects.filter(manager=manager)
   recruitment = recruitments.first()
-  return sedingObject(req, recruitment, recruitments)
+  return sendingObject(req, recruitment, recruitments)
+
+def send_rejection_email(recruitment_name, candidate_name, candidate_email):
+    print(recruitment_name, candidate_name, candidate_email)
+    email_body = get_rejection_email(recruitment_name, candidate_name, candidate_email)
+    
+    email = EmailMessage(
+        subject=f"Update on your application for {recruitment_name}",
+        body=email_body,
+        from_email=settings.EMAIL_HOST_USER,
+        to=[candidate_email],
+    )
+    email.content_subtype = "html"
+    email.send()
+
+   
+
+
+def send_acceptance_email(recruitment_name, candidate_name, candidate_email, next_steps):
+    print(recruitment_name, candidate_name, candidate_email)
+    email_body = get_acceptance_email(recruitment_name, candidate_name, candidate_email, next_steps)
+    
+    email = EmailMessage(
+        subject=f"Congratulations! Your application for {recruitment_name}",
+        body=email_body,
+        from_email=settings.EMAIL_HOST_USER,
+        to=[candidate_email],
+    )
+    email.content_subtype = "html"
+    email.send()
 
 @login_required
-def process_application(request, application_id):
-    print(application_id , " id got it")
-    application = get_object_or_404(CandidateApplicationModel, id=application_id)
-    print("application is found ", application)
-    recruitment_id=application.recruitment.id
-    action = request.POST.get('action')
-    print("action is found ", action)
-    if action == 'accept':
-        application.status = 'ACCEPTED'
-    elif action == 'reject':
-        application.status = 'REJECTED'
-    elif action == 'pending':
-        application.status = 'PENDING'
-    
-    application.save()
-    return redirect("manager:getApplication",id=recruitment_id)
+def sendBulkMails(req, id):
+  recruitment = get_object_or_404(RecruitmentModel,id= id)
+  recruitment.mailSent = True
+  recruitment.save()
+  appications = CandidateApplicationModel.objects.filter(recruitment = recruitment)
+  manager = get_object_or_404(Manager, emailid=req.user.email)
+  next_steps = [
+                "HR Interview: Our HR team will contact you within 3 working days to schedule your initial interview",
+                "Technical Assessment: You'll receive a technical task to complete within 5 days of HR interview",
+                "Technical Interview: Upon successful assessment, you'll have a technical discussion with our team",
+                "Final Interview: Meeting with department head and key stakeholders",
+                "Offer Process: Successful candidates will receive an offer within 2 days of final interview",
+                "Onboarding: Selected candidates will begin onboarding the following Monday after acceptance"
+            ]
+  for app in appications:
+     if app.status in ['PENDING','REJECTED']:
+        app.status = 'REJECTED'
+        
+        send_rejection_email(manager.name,app.profile.name, app.profile.email )
+     else:
+        send_acceptance_email(manager.name,app.profile.name, app.profile.email,next_steps )
+     app.save()
+  
+  return redirect("manager:getApplication",id=id)

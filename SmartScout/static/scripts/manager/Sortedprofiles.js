@@ -27,6 +27,11 @@ document.getElementById('filter-exp').addEventListener('click', function() {
   window.location.href = "?filter=exp";
 });
 
+document.getElementById('filter-all').addEventListener('click', function() {
+  window.location.href = "?filter=all";
+});
+
+
 const urlParams = new URLSearchParams(window.location.search);
 const filter = urlParams.get('filter');
 
@@ -39,3 +44,13 @@ if (filter === 'skills') {
 } else {
   document.getElementById('filter-all').classList.add('bg-blue-600', 'text-white');
 }
+
+
+document.getElementById('filter-exp').addEventListener('click', function () {
+  window.location.href = '?filter=exp'
+})
+
+document.getElementById('filter-all').addEventListener('click', function () {
+  window.location.href = '?filter=all'
+})
+

@@ -21,6 +21,6 @@ class RecruitmentModel(models.Model):
     minimum_experience = models.IntegerField(blank=False, null=False)
     form_status = models.BooleanField(default=Status.ACTIVE,blank=True, null=True)
     creation_date = models.DateField(auto_now_add=True,blank=True, null=True)
-    
+    mailSent=models.BooleanField(default=False,null=True,blank=True)
     def __str__(self):
         return str(self.id )+ ' ' +self.job_details
