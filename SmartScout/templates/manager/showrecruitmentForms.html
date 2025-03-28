@@ -15,41 +15,32 @@
         <h2 class="text-lg font-bold mb-4 text-white">Current Job Openings 🚀 Activate</h2>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {% for job in active_jobs %}
+            <div class="bg-gray-700 p-4 rounded-lg shadow-md relative flex flex-col h-full">
+              <a href="{% url 'manager:applications' job.id %}"><button id="edit" class="float-right px-3 py-1 bg-blue-500 text-white text-sm rounded-md hover:bg-blue-600">Show applications</button></a>
+              <h3 class="text-md text-white font-bold">{{ forloop.counter }} 💼 {{ job.title }}</h3>
+              <p class="text-sm text-gray-400 mt-2">📄 Job Details: {{ job.job_details }}</p>
+              <p class="text-sm text-gray-400">
+                🛠 Required Skills:{% for skill in job.skills_required %}
+                  <span class="bg-gray-600 text-white px-2 py-1 rounded-md text-sm">{{ skill }}</span>
+                {% endfor %}
+              </p>
+              <p class="text-sm text-gray-400">💰 Expected Salary: ₹{{ job.expected_salary }}</p>
+              <p class="text-sm text-gray-400">📅 Minimum Experience: {{ job.minimum_experience }} years</p>
 
-                <div class="bg-gray-700 p-4 rounded-lg shadow-md relative flex flex-col h-full">
-                  <h3 class="text-md text-white font-bold">{{ forloop.counter }} 💼 {{ job.title }}</h3>
-                  <p class="text-sm text-gray-400 mt-2">📄 Job Details: {{ job.job_details }}</p>
-                  <p class="text-sm text-gray-400">🛠 Required Skills: 
-                      {% for skill in job.skills_required %}
-                          <span class="bg-gray-600 text-white px-2 py-1 rounded-md text-sm">{{ skill }}</span>
-                      {% endfor %}
-                  </p>
-                  <p class="text-sm text-gray-400">💰 Expected Salary: ₹{{ job.expected_salary }}</p>
-                  <p class="text-sm text-gray-400">📅 Minimum Experience: {{ job.minimum_experience }} years</p>
-              
-                  <!-- Button Container pushed to bottom -->
-                  <div class="mt-auto flex justify-between">
-                    
-                    <a href="{% url 'manager:deactivate' job.id %}"> 
-                      <div class="mt-auto flex justify-end">
-                        <button class="px-3 py-1 bg-red-500 text-white text-sm rounded-md hover:bg-red-600">
-                          Deactivate
-                        </button>
-                      </div>
-                    </a> 
-                    <a href="{% url 'manager:updateForm' job.id %}">
-                        <button id="edit" class="px-3 py-1 bg-yellow-500 text-white text-sm rounded-md hover:bg-yellow-600">
-                            Edit ✏️
-                        </button>
-                    </a> 
-                    <form action="{% url 'manager:deleteForm' job.id %}" method="POST" onsubmit="return confirmDelete(event)">
-                      {% csrf_token %}
-                      <button type="submit" class="px-3 py-1 bg-red-500 text-white text-sm rounded-md hover:bg-red-600">
-                          Delete 🗑️
-                      </button>
-                  </form>
+              <!-- Button Container pushed to bottom -->
+              <div class="mt-auto flex justify-between">
+                <a href="{% url 'manager:deactivate' job.id %}">
+                  <div class="mt-auto flex justify-end">
+                    <button class="px-3 py-1 bg-red-500 text-white text-sm rounded-md hover:bg-red-600">Deactivate</button>
                   </div>
+                </a>
+                <a href="{% url 'manager:updateForm' job.id %}"><button id="edit" class="px-3 py-1 bg-yellow-500 text-white text-sm rounded-md hover:bg-yellow-600">Edit ✏️</button></a>
+                <form action="{% url 'manager:deleteForm' job.id %}" method="POST" onsubmit="return confirmDelete(event)">
+                  {% csrf_token %}
+                  <button type="submit" class="px-3 py-1 bg-red-500 text-white text-sm rounded-md hover:bg-red-600">Delete 🗑️</button>
+                </form>
               </div>
+            </div>
           {% endfor %}
         </div>
       </div>
@@ -58,58 +49,45 @@
         <h2 class="text-lg font-bold mb-4 text-white">Deactivated Forms</h2>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {% for job in deactivated_jobs %}
+            <div class="bg-gray-700 p-4 rounded-lg shadow-md relative flex flex-col h-full">
+              <h3 class="text-md text-white font-bold">{{ forloop.counter }} 💼 {{ job.title }}</h3>
+              <p class="text-sm text-gray-400 mt-2">📄 Job Details: {{ job.job_details }}</p>
+              <p class="text-sm text-gray-400">
+                🛠 Required Skills:{% for skill in job.skills_required %}
+                  <span class="bg-gray-600 text-white px-2 py-1 rounded-md text-sm">{{ skill }}</span>
+                {% endfor %}
+              </p>
+              <p class="text-sm text-gray-400">💰 Expected Salary: ₹{{ job.expected_salary }}</p>
+              <p class="text-sm text-gray-400">📅 Minimum Experience: {{ job.minimum_experience }} years</p>
 
-                <div class="bg-gray-700 p-4 rounded-lg shadow-md relative flex flex-col h-full">
-                  <h3 class="text-md text-white font-bold">{{ forloop.counter }} 💼 {{ job.title }}</h3>
-                  <p class="text-sm text-gray-400 mt-2">📄 Job Details: {{ job.job_details }}</p>
-                  <p class="text-sm text-gray-400">🛠 Required Skills: 
-                      {% for skill in job.skills_required %}
-                          <span class="bg-gray-600 text-white px-2 py-1 rounded-md text-sm">{{ skill }}</span>
-                      {% endfor %}
-                  </p>
-                  <p class="text-sm text-gray-400">💰 Expected Salary: ₹{{ job.expected_salary }}</p>
-                  <p class="text-sm text-gray-400">📅 Minimum Experience: {{ job.minimum_experience }} years</p>
-              
-                  <!-- Button Container pushed to bottom -->
-                  <div class="mt-auto flex justify-between">
-                      
-              
-                      <a href="{% url 'manager:activate' job.id %}"> 
-                      <div class="mt-auto flex justify-end">
-                        <button class="px-3 py-1 bg-green-500 text-white text-sm rounded-md hover:bg-green-600">
-                            Activate
-                        </button>
-                    </div>
-                      </a> 
-                      <a href="{% url 'manager:updateForm' job.id %}">
-                        <button id="edit" class="px-3 py-1 bg-yellow-500 text-white text-sm rounded-md hover:bg-yellow-600">
-                            Edit ✏️
-                        </button>
-                    </a> 
-                    <form action="{% url 'manager:deleteForm' job.id %}" method="POST" onsubmit="return confirmDelete(event)">
-                      {% csrf_token %}
-                      <button type="submit" class="px-3 py-1 bg-red-500 text-white text-sm rounded-md hover:bg-red-600">
-                          Delete 🗑️
-                      </button>
-                  </form>
+              <!-- Button Container pushed to bottom -->
+              <div class="mt-auto flex justify-between">
+                <a href="{% url 'manager:activate' job.id %}">
+                  <div class="mt-auto flex justify-end">
+                    <button class="px-3 py-1 bg-green-500 text-white text-sm rounded-md hover:bg-green-600">Activate</button>
                   </div>
+                </a>
+                <a href="{% url 'manager:updateForm' job.id %}"><button id="edit" class="px-3 py-1 bg-yellow-500 text-white text-sm rounded-md hover:bg-yellow-600">Edit ✏️</button></a>
+                <form action="{% url 'manager:deleteForm' job.id %}" method="POST" onsubmit="return confirmDelete(event)">
+                  {% csrf_token %}
+                  <button type="submit" class="px-3 py-1 bg-red-500 text-white text-sm rounded-md hover:bg-red-600">Delete 🗑️</button>
+                </form>
               </div>
+            </div>
           {% endfor %}
         </div>
       </div>
 
       <!-- Add Job Posting Section -->
       <div class="text-right mb-6">
-        <a href="{% url 'manager:genarateForm' %}">
-          <button class="px-4 py-2 bg-green-500 text-white font-bold rounded-md shadow hover:bg-green-600 focus:outline-none">+ Post a New Job ✨</button>
-        </a>
+        <a href="{% url 'manager:genarateForm' %}"><button class="px-4 py-2 bg-green-500 text-white font-bold rounded-md shadow hover:bg-green-600 focus:outline-none">+ Post a New Job ✨</button></a>
       </div>
     </div>
 
     <div class="z-0 relative">
       {% include 'include/footer.html' %}
     </div>
-    
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/110/three.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/vanta/0.5.24/vanta.net.min.js"></script>
     <script>
@@ -122,21 +100,17 @@
         minWidth: 200.0,
         scale: 1.0,
         scaleMobile: 1.0,
-        color: 0x3b82f6, 
-        backgroundColor: 0x1a1a1a, 
+        color: 0x3b82f6,
+        backgroundColor: 0x1a1a1a,
         points: 20.0,
         maxDistance: 24.0
-      });
+      })
       
-        function confirmDelete(event) {
-            if (!confirm("Are you sure you want to delete this job? This action cannot be undone.")) {
-                event.preventDefault();  // Prevent form submission if the user cancels
-            }
+      function confirmDelete(event) {
+        if (!confirm('Are you sure you want to delete this job? This action cannot be undone.')) {
+          event.preventDefault() // Prevent form submission if the user cancels
         }
-    
-
-
-
+      }
     </script>
   </div>
 {% endblock %}

@@ -30,5 +30,5 @@ urlpatterns = [
     path('update/<int:id>/', updateProfile, name="updateProfile"),
     path("scanpdf/" ,upload_resume, name="upload_resume"),
     path("applyJob/<int:id>/",applyForJob,name="applyJob"),
-    
+
 ]

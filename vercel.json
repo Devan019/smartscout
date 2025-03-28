@@ -1,0 +1,15 @@
+{
+  "builds": [
+    {
+      "src": "smartscout/smartscout/wsgi.py",
+      "use": "@vercel/python"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "/smartscout/smartscout/wsgi.py"
+    }
+  ]
+  
+}

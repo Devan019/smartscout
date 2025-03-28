@@ -11,7 +11,8 @@
         <a href="#" class="hover:text-blue-400 px-3 py-2 rounded-md text-sm font-medium">Home</a>
         <a href="#benefits" class="hover:text-blue-400 px-3 py-2 rounded-md text-sm font-medium">Features</a>
         {% if user.is_authenticated %}
-          <a href="{% url 'manager:readForms' %}">Recruitment</a>
+          <a class="hover:text-blue-400 px-3 py-2 rounded-md text-sm font-medium" href="{% url 'manager:getDefaultApplication'  %}">Applications</a>
+          <a class="hover:text-blue-400 px-3 py-2 rounded-md text-sm font-medium" href="{% url 'manager:readForms' %}">Recruitment</a>
           <a href="{% url 'myauth:login' %}" class="hover:text-blue-400 px-3 py-2 rounded-md text-sm font-medium">{{ user.username }}</a>
           <a href="{% url 'myauth:logout' %}" class="hover:text-blue-400 px-3 py-2 rounded-md text-sm font-medium">Logout</a>
         {% else %}

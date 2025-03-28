@@ -22,7 +22,6 @@ def getForm(req):
             print("after valid")
             newPro = form.save(commit=False)
             newPro.user = req.user
-            print(newPro.user.email)
             newPro.email = req.user.email
             newPro.save()
             return redirect("employee:home")
@@ -63,8 +62,10 @@ def updateProfile(req, id):
             skills = form.cleaned_data.get('skills_required')
             empobj.user = req.user
             empobj.skills_required = skills
-            
-            form.save()
+            print(empobj.jobsApplied , " applied")
+            # form.save()
+            empobj.save()
+            print(empobj.jobsApplied , " applied")
             print('saved')
             return redirect('employee:createCandidate')
         else:
@@ -99,11 +100,14 @@ def applyForJob(req,id):
     
     required_fields = ['name', 'email', 'phone', 'resume','experience','university']
     missing_fields = [field for field in required_fields if not getattr(empObj, field)]
-
-    if missing_fields:
-        return redirect("employee:update_profile")
-    
-    
+    print("before miss ", )
+    if empObj.experience != 0:
+        if missing_fields:
+            print(" in first consition ", missing_fields)
+            return redirect("employee:updateProfile", id=id)
+    elif empObj.experience == None:
+         return redirect("employee:updateProfile", id=id)
+    print("after miss check")
     jobObj = CandidateApplicationModel()
     user = CustomUser.objects.get(pk=req.user.id)
     jobObj.profile = empObj
@@ -111,10 +115,15 @@ def applyForJob(req,id):
     jobObj.user = user
     print(jobObj.user)
     
-    jobObj.recruiment = recruitObj
-    print(jobObj.recruiment)
-
+    jobObj.recruitment = recruitObj
+    print(jobObj.recruitment)
+    print("after recu")
     jobObj.save()
     if jobObj.id:
         empObj.jobsApplied.add(recruitObj)
+        empObj.save()
+
+    print("done bro")
     return redirect("employee:jobs")
+
+

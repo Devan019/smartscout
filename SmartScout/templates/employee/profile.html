@@ -33,7 +33,7 @@
               <!-- Name and contact row -->
               <div class="flex flex-col">
                 <h2 class="text-3xl font-bold text-white mb-1">{{ profile.name }}</h2>
-                <p class="text-blue-400 text-lg">{{ profile.email }}</p>
+                <p class="text-blue-400 text-lg">email {{ profile.email }}</p>
                 <p class="text-gray-400">{{ profile.phone }}</p>
               </div>
               
@@ -86,12 +86,19 @@
             <!-- Right side: Profile picture -->
             <div class="w-full md:w-1/3 flex justify-center">
               <div class="relative group">
-                {% comment %} <div class="absolute -inset-1 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-full opacity-75 blur group-hover:opacity-100 transition duration-1000 group-hover:duration-200"></div> {% endcomment %}
-                <div class="relative w-64 h-64 rounded-full overflow-hidden border-4 border-white shadow-2xl">
-                  <img src="{{ profile.profile_pic.url }}" alt="Profile Picture" class="w-full h-full object-cover transition-transform duration-500 transform group-hover:scale-110" />
-                </div>
+                  {# <div class="absolute -inset-1 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-full opacity-75 blur group-hover:opacity-100 transition duration-1000 group-hover:duration-200"></div> #}
+                  <div class="relative w-64 h-64 rounded-full overflow-hidden border-4 border-white shadow-2xl">
+                      {% if profile and profile.profile_pic %}
+                          <img src="{{ profile.profile_pic.url }}" alt="Profile Picture"
+                               class="w-full h-full object-cover transition-transform duration-500 transform group-hover:scale-110" />
+                      {% else %}
+                          <img src="" alt="Default Profile Picture"
+                               class="w-full h-full object-cover transition-transform duration-500 transform group-hover:scale-110" />
+                      {% endif %}
+                  </div>
               </div>
-            </div>
+          </div>
+          
           </div>
         </div>
       </div>

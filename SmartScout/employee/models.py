@@ -24,9 +24,21 @@ class Profile(models.Model):
         return self.name
 
 class CandidateApplicationModel(models.Model):
+    STATUS_CHOICES = [
+        ('PENDING', 'Pending'),
+        ('ACCEPTED', 'Accepted'),
+        ('REJECTED', 'Rejected'),
+    ]
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE ,related_name="user")
-    recruiment = models.ForeignKey(RecruitmentModel, on_delete=models.CASCADE, related_name="recruitment")
+    recruitment = models.ForeignKey(RecruitmentModel, on_delete=models.CASCADE, related_name="recruitment")
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name="profile")
     # apply_date = models.DateField(default=timezone.now().date())
+    status = models.CharField(
+        max_length=20,
+        choices=STATUS_CHOICES,
+        default='PENDING',
+        null=True,
+        blank=True
+    )
     def __str__(self):
-        return self.user.username + " " + self.recruiment.manager.name
+        return self.user.username + " " + self.recruitment.job_details
