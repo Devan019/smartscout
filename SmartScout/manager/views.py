@@ -197,9 +197,6 @@ def sedingObject(req,recruitment, recruitments):
       'profiles_by_experience': profiles_sorted_by_experience,
       'job_title': recruitment.job_details[:50] + '...' if recruitment.job_details else ''
   })
-
-
-
 @login_required
 def showsStatusApplications(req, id):
    print(req.user.id)
@@ -217,3 +214,20 @@ def showsDeafultStatusApplications(req):
   recruitment = recruitments.first()
   return sedingObject(req, recruitment, recruitments)
 
+@login_required
+def process_application(request, application_id):
+    print(application_id , " id got it")
+    application = get_object_or_404(CandidateApplicationModel, id=application_id)
+    print("application is found ", application)
+    recruitment_id=application.recruitment.id
+    action = request.POST.get('action')
+    print("action is found ", action)
+    if action == 'accept':
+        application.status = 'ACCEPTED'
+    elif action == 'reject':
+        application.status = 'REJECTED'
+    elif action == 'pending':
+        application.status = 'PENDING'
+    
+    application.save()
+    return redirect("manager:getApplication",id=recruitment_id)
