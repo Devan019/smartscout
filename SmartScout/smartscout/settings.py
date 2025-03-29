@@ -23,7 +23,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv('django-insecure-k9(stxwosw^&c3uy2%+t+ri)-1g2i6!^8+267cycc$f!#-$(jc')
+SECRET_KEY = 'django-insecure-k9(stxwosw^&c3uy2%+t+ri)-1g2i6!^8+267cycc$f!#-$(jc'
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
@@ -93,23 +93,23 @@ WSGI_APPLICATION = 'smartscout.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
-
 DATABASES = {
-  'default' : {
-    'ENGINE' : 'django.db.backends.postgresql',
-    'NAME': 'railway',
-    'USER' : 'postgres',
-    'PASSWORD' : 'wMpsfVHtxiQgZIMhhsNyAPEdcCFBAzNP',
-    "HOST" : 'shinkansen.proxy.rlwy.net',
-    'PORT' : '35238'
-  }
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
 }
+
+# DATABASES = {
+#   'default' : {
+#     'ENGINE' : 'django.db.backends.postgresql',
+#     'NAME': 'railway',
+#     'USER' : 'postgres',
+#     'PASSWORD' : 'wMpsfVHtxiQgZIMhhsNyAPEdcCFBAzNP',
+#     "HOST" : 'shinkansen.proxy.rlwy.net',
+#     'PORT' : '35238'
+#   }
+# }
 
 
 # Password validation
