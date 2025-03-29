@@ -149,12 +149,12 @@ EMAIL_HOST_USER = 'devanchauhan012@gmail.com'
 EMAIL_HOST_PASSWORD = os.getenv("MAIL_KEY") 
 
 
-STATIC_URL = '/static/'
 
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, "smartscout/static"), 
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")  # For collectstatic
+STATICFILES_DIRS = [  # Dev mode me static files serve karne ke liye
+    os.path.join(BASE_DIR, "static"),  
 ]
-STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles") 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
  

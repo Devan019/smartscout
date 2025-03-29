@@ -26,9 +26,13 @@ class EmployeeForm(forms.ModelForm):
         ('TL', 'Team Lead'),
         ('MGR', 'Manager'),
     )
-    position = forms.CharField(max_length=100)
+    role=forms.CharField(max_length=100)
     experience = forms.IntegerField(help_text="Years of experience")
     employee_type = forms.ChoiceField(choices=EMPLOYEE_TYPES)
     salary_lpa = forms.DecimalField(max_digits=5, decimal_places=2)
+
+    class Meta:
+        model = models.EmployeeModel  # This was missing
+        fields = ['experience', 'role', 'employee_type', 'salary_lpa'] 
 
 

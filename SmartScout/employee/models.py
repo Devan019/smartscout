@@ -21,9 +21,6 @@ class Profile(models.Model):
     def __str__(self):
         return self.name
     
-    def get_recruitment(self):
-        from manager.models import RecruitmentModel  # 🔥 Lazy Import here
-        return RecruitmentModel.objects.all()
 
 class CandidateApplicationModel(models.Model):
     STATUS_CHOICES = [
@@ -34,7 +31,7 @@ class CandidateApplicationModel(models.Model):
     
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE ,related_name="user")
     recruitment = models.ForeignKey('manager.RecruitmentModel', on_delete=models.CASCADE, related_name="recruitment")
-    profile = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name="profile")
+    profile = models.ForeignKey('employee.Profile', on_delete=models.CASCADE, related_name="profile")
     # apply_date = models.DateField(default=timezone.now().date())
     status = models.CharField(
         max_length=20,

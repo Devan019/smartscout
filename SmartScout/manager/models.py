@@ -3,7 +3,6 @@ from django.db import models
 from django.forms import ValidationError
 
 from myadmin.models import Manager
-from employee.models import Profile
 
 # Create your models here.
 def validate_non_empty_list(value):
@@ -41,8 +40,9 @@ class EmployeeModel(models.Model):
         ('MGR', 'Manager'),
     )
 
-    manager = models.OneToOneField(Manager, on_delete=models.CASCADE, related_name="employee_manager")
+    manager = models.ForeignKey(Manager, on_delete=models.CASCADE, related_name="employee_manager")
     profile = models.OneToOneField("employee.Profile", on_delete=models.CASCADE, related_name="employee_profile", blank=True, null=True)  # ✅ String reference
+    role=models.CharField(max_length=100,null=True,blank=True)
     experience = models.PositiveIntegerField(help_text="Years of experience")
     employee_type = models.CharField(max_length=3, choices=EMPLOYEE_TYPES)
     salary_lpa = models.DecimalField(max_digits=5, decimal_places=2, verbose_name="Salary (LPA)")

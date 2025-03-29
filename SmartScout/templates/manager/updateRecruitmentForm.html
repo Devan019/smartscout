@@ -1,6 +1,6 @@
 
 {% extends "index.html" %}
-
+{% load static %}
 {% block title %}Update Recruitment Form{% endblock %}
 
 {% block content %}
@@ -114,5 +114,5 @@
     
       
   </div>
-  <script src="/static/scripts/manager/updateRecruitmentForm.js"></script>
+  <script src="{% static 'scripts/manager/updateRecruitmentForm.js' %}"></script>
 {% endblock %}

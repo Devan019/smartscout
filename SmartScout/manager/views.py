@@ -262,48 +262,84 @@ def sendBulkMails(req, id):
 
 @login_required
 def manager_dashboard(request):
-    candiadtes = CandidateApplicationModel.objects.filter(status=True)
+    candiadtes = CandidateApplicationModel.objects.filter(status='ACCEPTED')
     employees = EmployeeModel.objects.all()
+    print(employees, candiadtes)
+    non_selected_candidates = []
+    emails = set()
+    for employee in employees:
+       emails.add(employee.profile.email)
+
+    for candidate in candiadtes:
+       if candidate.profile.email not in emails:
+          non_selected_candidates.append(candidate)
+
+    print(non_selected_candidates)
     return render(request, 'manager/ManagerDashboard.html', {
        'employees' : employees,
-       'candidates' : candiadtes
+       'candidates' : non_selected_candidates
     })
 
 @login_required
-def create_employee(req, pro_id):
-  manager = get_object_or_404(Manager , emailid = req.email)
-  if(req.method == 'POST'):
-     form = EmployeeForm(req.POST)
+def create_employee(req):
+        print(" in try ")
+        manager = get_object_or_404(Manager, emailid=req.user.email)
+        print("manager found", manager)
+        if req.method == 'POST':
+            print("in post ", req.POST)
+            form = EmployeeForm(req.POST)
+            # print("form is found ", form)
+            if form.is_valid():
+                print("form is vaild")
+                pro_id = req.GET.get('candidate_id')
+                print("id get", pro_id)
+                candidate = get_object_or_404(Profile, id=pro_id)
+                print("candidate gate", candidate)
+                newEmployee = EmployeeModel(
+                    experience=form.cleaned_data['experience'],
+                    role=form.cleaned_data['role'],
+                    manager=manager,
+                    employee_type=form.cleaned_data['employee_type'],
+                    salary_lpa=form.cleaned_data['salary_lpa'],
+                    profile=candidate
+                )
+                print(newEmployee)
+                newEmployee.save()
+                
+                
+            
+            # If form is invalid
+        return redirect("manager:manager_dashboard")
 
-     if form.is_valid():
-        newEmployee = EmployeeModel()
-        newEmployee.experience = form.experience
-        newEmployee.manager = manager
-        newEmployee.employee_type = form.employee_type
-        newEmployee.salary_lpa = form.salary_lpa
-        newEmployee.profile = get_object_or_404(CandidateApplicationModel,id=pro_id)
-        newEmployee.save()
-  return redirect("manager:employees")
+
 
 @login_required
-def update_employee(request, id):
-    
+def update_employee(request):
+  id=request.GET.get('id')
   employee = get_object_or_404(EmployeeModel, pk=id)
     
   if request.method == 'POST':
       form = EmployeeForm(request.POST, instance=employee)
+      print("form is ", form)
       if form.is_valid():
-          employee.experience = form.experience
-          employee.employee_type = form.employee_type
-          employee.salary_lpa = form.salary_lpa
+          print("form is valid")
+          employee.experience = form.cleaned_data['experience']
+          employee.employee_type = form.cleaned_data['employee_type']
+          employee.salary_lpa = form.cleaned_data['salary_lpa']
+          employee.role = form.cleaned_data['role']
           employee.save()
-  return redirect('manager:employees')
+  return redirect('manager:manager_dashboard')
    
 @login_required
-def delete_employee(request, id):
+def delete_employee(request):
+    id=request.GET.get('id')
     employee = get_object_or_404(EmployeeModel, id=id)
     
     if request.method == 'POST':
         employee.delete()
-    return redirect('manager:employees')
-    
+    return redirect('manager:manager_dashboard')
+
+@login_required    
+def get_employee(req):
+  emp_id = req.POST.id
+  return get_object_or_404(EmployeeModel,id=emp_id)

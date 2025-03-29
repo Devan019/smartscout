@@ -36,6 +36,6 @@ urlpatterns = [
     path('sendmails/<int:id>',views.sendBulkMails, name="sendBulkMails"),
     path('employees/',views.manager_dashboard, name="manager_dashboard"),
     path('employees/add',views.create_employee, name="create_employee"),
-    path('employees/update/<int:id>',views.update_employee, name="update_employee"),
-    path('employees/delete/<int:id>',views.delete_employee, name="delete_employee"),
+    path('employees/update/',views.update_employee, name="update_employee"),
+    path('employees/delete/',views.delete_employee, name="delete_employee"),
 ]
