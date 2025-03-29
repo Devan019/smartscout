@@ -1,0 +1,143 @@
+{% extends 'index.html' %}
+
+{% block title %}
+  Manager DashBoard
+{% endblock %}
+
+{% block content %}
+  <div class="main flex flex-col">
+    {% include 'manager/nav.html' %}
+
+    <div class="space-y-6">
+      <h1 class="text-3xl font-bold">Welcome, {{ user.username }}</h1>
+
+      <!-- Stats Cards -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="card p-6">
+          <div class="flex justify-between items-center">
+            <div>
+              <p class="text-gray-400">Total Employees</p>
+              <h2 class="text-2xl font-bold">{{ total_employees }}</h2>
+            </div>
+            <i class="fas fa-users text-3xl text-blue-400"></i>
+          </div>
+        </div>
+
+        <div class="card p-6">
+          <div class="flex justify-between items-center">
+            <div>
+              <p class="text-gray-400">New Hires</p>
+              <h2 class="text-2xl font-bold">{{ new_hires }}</h2>
+            </div>
+            <i class="fas fa-user-plus text-3xl text-green-400"></i>
+          </div>
+        </div>
+
+        <div class="card p-6">
+          <div class="flex justify-between items-center">
+            <div>
+              <p class="text-gray-400">Pending Requests</p>
+              <h2 class="text-2xl font-bold">{{ pending_requests }}</h2>
+            </div>
+            <i class="fas fa-clock text-3xl text-yellow-400"></i>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Actions -->
+      <div class="card p-6">
+        <h2 class="text-xl font-bold mb-4">Quick Actions</h2>
+        <div class="flex space-x-4">
+          <button onclick="toggleModal('createEmployeeModal')" class="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded flex items-center"><i class="fas fa-plus mr-2"></i> Create Employee</button>
+          <a href="{% url 'employee_list' %}" class="bg-gray-600 hover:bg-gray-700 px-4 py-2 rounded flex items-center"><i class="fas fa-users mr-2"></i> View All Employees</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Create Employee Modal -->
+    <div id="createEmployeeModal" class="modal hidden fixed inset-0 items-center justify-center z-50">
+      <div class="bg-gray-800 rounded-lg p-6 w-full max-w-2xl">
+        <div class="flex justify-between items-center mb-4">
+          <h3 class="text-xl font-bold">Create New Employee</h3>
+          <button onclick="toggleModal('createEmployeeModal')" class="text-gray-400 hover:text-white"><i class="fas fa-times"></i></button>
+        </div>
+
+        <form method="post" action="{% url 'create_employee' %}">
+          {% csrf_token %}
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-gray-400 mb-2">First Name</label>
+              <input type="text" name="first_name" required class="w-full bg-gray-700 rounded px-3 py-2" />
+            </div>
+            <div>
+              <label class="block text-gray-400 mb-2">Last Name</label>
+              <input type="text" name="last_name" required class="w-full bg-gray-700 rounded px-3 py-2" />
+            </div>
+            <div>
+              <label class="block text-gray-400 mb-2">Email</label>
+              <input type="email" name="email" required class="w-full bg-gray-700 rounded px-3 py-2" />
+            </div>
+            <div>
+              <label class="block text-gray-400 mb-2">Username</label>
+              <input type="text" name="username" required class="w-full bg-gray-700 rounded px-3 py-2" />
+            </div>
+            <div>
+              <label class="block text-gray-400 mb-2">Password</label>
+              <input type="password" name="password" required class="w-full bg-gray-700 rounded px-3 py-2" />
+            </div>
+            <div>
+              <label class="block text-gray-400 mb-2">Position</label>
+              <input type="text" name="position" required class="w-full bg-gray-700 rounded px-3 py-2" />
+            </div>
+            <div>
+              <label class="block text-gray-400 mb-2">Experience (years)</label>
+              <input type="number" name="experience" required class="w-full bg-gray-700 rounded px-3 py-2" />
+            </div>
+            <div>
+              <label class="block text-gray-400 mb-2">Employee Type</label>
+              <select name="employee_type" class="w-full bg-gray-700 rounded px-3 py-2">
+                <option value="FR">Fresher</option>
+                <option value="JR">Junior</option>
+                <option value="SR">Senior</option>
+                <option value="TL">Team Lead</option>
+                <option value="MGR">Manager</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-gray-400 mb-2">Salary (LPA)</label>
+              <input type="number" step="0.01" name="salary_lpa" required class="w-full bg-gray-700 rounded px-3 py-2" />
+            </div>
+          </div>
+
+          <div class="mt-6 flex justify-end space-x-3">
+            <button type="button" onclick="toggleModal('createEmployeeModal')" class="px-4 py-2 rounded bg-gray-600 hover:bg-gray-700">Cancel</button>
+            <button type="submit" class="px-4 py-2 rounded bg-blue-600 hover:bg-blue-700">Create Employee</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div class="z-0 relative">
+      {% include 'include/footer.html' %}
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/110/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vanta/0.5.24/vanta.net.min.js"></script>
+    <script>
+      VANTA.NET({
+        el: 'body',
+        mouseControls: true,
+        touchControls: true,
+        gyroControls: false,
+        minHeight: 200.0,
+        minWidth: 200.0,
+        scale: 1.0,
+        scaleMobile: 1.0,
+        color: 0x3b82f6,
+        backgroundColor: 0x1a1a1a,
+        points: 20.0,
+        maxDistance: 24.0
+      })
+    </script>
+  </div>
+{% endblock %}

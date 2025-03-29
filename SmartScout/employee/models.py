@@ -1,10 +1,8 @@
-from pyexpat import model
-from time import timezone
-from django.db import models
 
-from manager.forms import validate_non_empty_list
+from django.db import models
+from manager.utils import validate_non_empty_list
+
 from myauth.models import CustomUser
-from manager.models import RecruitmentModel
 
 class Profile(models.Model):
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, related_name="user_id", blank=True , null = True)
@@ -18,10 +16,14 @@ class Profile(models.Model):
     skills_required = models.JSONField(default=list,validators=[validate_non_empty_list])
     experience = models.IntegerField(blank=True,null=True)
     resume = models.FileField(upload_to='media/resumes/', blank=False)
-    jobsApplied = models.ManyToManyField(RecruitmentModel, related_name="formsApplied",blank=True)
+    jobsApplied = models.ManyToManyField('manager.RecruitmentModel', related_name="formsApplied", blank=True)
 
     def __str__(self):
         return self.name
+    
+    def get_recruitment(self):
+        from manager.models import RecruitmentModel  # 🔥 Lazy Import here
+        return RecruitmentModel.objects.all()
 
 class CandidateApplicationModel(models.Model):
     STATUS_CHOICES = [
@@ -31,7 +33,7 @@ class CandidateApplicationModel(models.Model):
     ]
     
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE ,related_name="user")
-    recruitment = models.ForeignKey(RecruitmentModel, on_delete=models.CASCADE, related_name="recruitment")
+    recruitment = models.ForeignKey('manager.RecruitmentModel', on_delete=models.CASCADE, related_name="recruitment")
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name="profile")
     # apply_date = models.DateField(default=timezone.now().date())
     status = models.CharField(

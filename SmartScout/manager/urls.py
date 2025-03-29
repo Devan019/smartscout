@@ -33,5 +33,9 @@ urlpatterns = [
     path('application/process/<int:application_id>/', views.process_application, name='process_application'),
     path('applications/<int:id>/',views.showsStatusApplications, name="getApplication"),
     path('applications/',views.showsDeafultStatusApplications, name="getDefaultApplication"),
-    path('sendmails/<int:id>',views.sendBulkMails, name="sendBulkMails")
+    path('sendmails/<int:id>',views.sendBulkMails, name="sendBulkMails"),
+    path('employees/',views.manager_dashboard, name="manager_dashboard"),
+    path('employees/add',views.create_employee, name="create_employee"),
+    path('employees/update/<int:id>',views.update_employee, name="update_employee"),
+    path('employees/delete/<int:id>',views.delete_employee, name="delete_employee"),
 ]

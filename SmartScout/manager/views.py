@@ -6,11 +6,11 @@ from django.shortcuts import get_object_or_404, redirect, render
 from employee.models import CandidateApplicationModel, Profile
 from manager.accepted import get_acceptance_email
 from manager.rejection import get_rejection_email
-from .models import RecruitmentModel, Status
+from .models import EmployeeModel, RecruitmentModel, Status
 from myadmin.models import Manager
-from .forms import RecruitmentForm
+from .forms import EmployeeForm, RecruitmentForm
 from django.contrib.auth.decorators import login_required
-
+from django.db.models import Q
 # Create your views here.
 @login_required
 def home(req):
@@ -77,7 +77,6 @@ def doActivate(req, id):
   form.form_status = Status.ACTIVE
   form.save()
   return redirect("manager:readForms")
-
   
 @login_required
 def updateRecruitmentForm(req,id):
@@ -110,7 +109,6 @@ def deleteRecruitmentForm(req,id):
   recobj = get_object_or_404(RecruitmentModel,id = id)
   recobj.delete()
   return redirect('manager:readForms')
-
 
 @login_required
 def showProfile(req, id):
@@ -223,9 +221,6 @@ def send_rejection_email(recruitment_name, candidate_name, candidate_email):
     email.content_subtype = "html"
     email.send()
 
-   
-
-
 def send_acceptance_email(recruitment_name, candidate_name, candidate_email, next_steps):
     print(recruitment_name, candidate_name, candidate_email)
     email_body = get_acceptance_email(recruitment_name, candidate_name, candidate_email, next_steps)
@@ -264,3 +259,51 @@ def sendBulkMails(req, id):
      app.save()
   
   return redirect("manager:getApplication",id=id)
+
+@login_required
+def manager_dashboard(request):
+    candiadtes = CandidateApplicationModel.objects.filter(status=True)
+    employees = EmployeeModel.objects.all()
+    return render(request, 'manager/ManagerDashboard.html', {
+       'employees' : employees,
+       'candidates' : candiadtes
+    })
+
+@login_required
+def create_employee(req, pro_id):
+  manager = get_object_or_404(Manager , emailid = req.email)
+  if(req.method == 'POST'):
+     form = EmployeeForm(req.POST)
+
+     if form.is_valid():
+        newEmployee = EmployeeModel()
+        newEmployee.experience = form.experience
+        newEmployee.manager = manager
+        newEmployee.employee_type = form.employee_type
+        newEmployee.salary_lpa = form.salary_lpa
+        newEmployee.profile = get_object_or_404(CandidateApplicationModel,id=pro_id)
+        newEmployee.save()
+  return redirect("manager:employees")
+
+@login_required
+def update_employee(request, id):
+    
+  employee = get_object_or_404(EmployeeModel, pk=id)
+    
+  if request.method == 'POST':
+      form = EmployeeForm(request.POST, instance=employee)
+      if form.is_valid():
+          employee.experience = form.experience
+          employee.employee_type = form.employee_type
+          employee.salary_lpa = form.salary_lpa
+          employee.save()
+  return redirect('manager:employees')
+   
+@login_required
+def delete_employee(request, id):
+    employee = get_object_or_404(EmployeeModel, id=id)
+    
+    if request.method == 'POST':
+        employee.delete()
+    return redirect('manager:employees')
+    
