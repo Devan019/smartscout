@@ -6,9 +6,9 @@ from django.shortcuts import get_object_or_404, redirect, render
 from employee.models import CandidateApplicationModel, Profile
 from manager.accepted import get_acceptance_email
 from manager.rejection import get_rejection_email
-from .models import EmployeeModel, RecruitmentModel, Status
+from .models import EmployeeModel, RecruitmentModel, Status, TeamModel
 from myadmin.models import Manager
-from .forms import EmployeeForm, RecruitmentForm
+from .forms import EmployeeForm, RecruitmentForm, TeamForm
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 # Create your views here.
@@ -341,4 +341,30 @@ def delete_employee(request):
 
 @login_required
 def team_management(req):
-   return render(req, "manager/TeamDashboard.html")
+   teams = TeamModel.objects.all()
+   emps = EmployeeModel.objects.all()
+   return render(req, "manager/TeamDashboard.html",{
+      'teams' : teams,
+      'employees' : emps
+   })
+
+@login_required
+def create_team(req):
+  if(req.method == 'POST'):
+     form = TeamForm(req.POST)
+     if(form.is_valid()):
+        form.save()
+  redirect("manager:team")
+
+@login_required
+def update_team(req, id):
+  team = get_object_or_404(TeamModel, id=id)
+  if(req.method == 'POST'):
+    form = TeamForm(req.POST)
+    team.team_member = form.cleaned_data['team_member']
+    team.team_name = form.cleaned_data['team_name']
+    team.project_name = form.cleaned_data['project_name']
+    team.project_status  = form.cleaned_data['project_status']
+    team.skills = form.cleaned_data['skills']
+    team.save()
+  redirect("manager:team")
