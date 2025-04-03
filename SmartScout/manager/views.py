@@ -373,8 +373,6 @@ def create_team(req):
             new_team.skills = skills
             
             new_team.save()
-
-
             return redirect("manager:team")
             
         except Exception as e:
