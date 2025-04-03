@@ -340,7 +340,7 @@ def delete_employee(request):
 @login_required
 def team_management(req):
 	teams = TeamModel.objects.all()
-	return render(req, "manager/TeamDashboard.html",{'teams	':teams})
+	return render(req, "manager/TeamDashboard.html",{'teams':teams})
  
 @login_required
 def team_delete(req,id):
@@ -352,7 +352,7 @@ def team_delete(req,id):
 	team.delete()
 	return redirect('manager:team')
 
-
+@login_required
 def team_update(req,id):
 	team = TeamModel.objects.get(id=id)
 	
@@ -372,6 +372,7 @@ def team_update(req,id):
 	form = TeamForm()
 	return render(req,'manager/update_team.html',{'form':form})
 
+@login_required
 def toggle_project_status(req,id):
 	team = TeamModel.objects.get(id = id)
 	team.project_status = 'CP' if team.project_status == 'IP' else 'IP'
