@@ -338,3 +338,7 @@ def delete_employee(request):
     if request.method == 'POST':
         employee.delete()
     return redirect('manager:manager_dashboard')
+
+@login_required
+def team_management(req):
+   return render(req, "manager/TeamDashboard.html")

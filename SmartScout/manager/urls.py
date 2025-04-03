@@ -38,4 +38,5 @@ urlpatterns = [
     path('employees/add',views.create_employee, name="create_employee"),
     path('employees/update/',views.update_employee, name="update_employee"),
     path('employees/delete/',views.delete_employee, name="delete_employee"),
+    path('team/',views.team_management, name="team"),
 ]
