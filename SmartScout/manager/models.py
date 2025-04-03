@@ -52,3 +52,20 @@ class EmployeeModel(models.Model):
 
     def __str__(self):
         return f"{self.manager} - {self.employee_type}"
+
+class TeamModel(models.Model):
+    STATUS_CHOICES = [
+        ('IP', 'In Progress'),
+        ('CP', 'Completed'),
+    ]
+
+    team_member = models.ManyToManyField('EmployeeModel', related_name="team_member")
+    team_name = models.CharField(max_length=100, null=True, blank=True)
+    project_name = models.CharField(max_length=100, null=True, blank=True)
+    skills = models.JSONField(default=list)
+    project_status = models.CharField(max_length=2, choices=STATUS_CHOICES, default='IP')
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"{self.team_name} - {self.project_name}"

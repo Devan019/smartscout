@@ -32,7 +32,11 @@ class EmployeeForm(forms.ModelForm):
     salary_lpa = forms.DecimalField(max_digits=5, decimal_places=2)
 
     class Meta:
-        model = models.EmployeeModel  # This was missing
+        model = models.EmployeeModel 
         fields = ['experience', 'role', 'employee_type', 'salary_lpa'] 
 
+class TeamForm(forms.ModelForm):
+    class Meta:
+        model = models.TeamModel
+        fields = ['team_member', 'team_name', 'project_name', 'skills']
 
