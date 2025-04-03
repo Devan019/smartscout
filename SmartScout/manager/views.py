@@ -339,18 +339,46 @@ def delete_employee(request):
 
 @login_required
 def team_management(req):
-	teams = TeamModel.objects.all()
-	return render(req, "manager/TeamDashboard.html",{'teams':teams})
- 
+   teams = TeamModel.objects.all()
+   emps = EmployeeModel.objects.all()
+   return render(req, "manager/TeamDashboard.html",{
+      'teams' : teams,
+      'employees' : emps
+   })
+
 @login_required
-def team_delete(req,id):
-	try:
-		team = TeamModel.objects.get(id=id)
-	except TeamModel.DoesNotExist:
-		team = None  
-	
-	team.delete()
-	return redirect('manager:team')
+def create_team(req):
+    if req.method == 'POST':
+        try:
+           
+            project_name = req.POST.get('project_name')
+            description = req.POST.get('project_description')
+            team_name = req.POST.get('team_name')
+            member_emails = req.POST.getlist('members')
+            skills = req.POST.get('skills', '').split(',')
+            
+            new_team = TeamModel.objects.create(
+                project_name=project_name,
+                project_description=description,
+                team_name=team_name,
+                
+            )
+            
+            members = EmployeeModel.objects.filter(profile__email__in=member_emails)
+            new_team.team_member.set(members)
+            
+            
+            skills = req.POST.get('skills', '').split(',')
+            print(skills)
+            new_team.skills = skills
+            
+            new_team.save()
+            return redirect("manager:team")
+            
+        except Exception as e:
+            return redirect("manager:team")
+    
+    return redirect("manager:team")
 
 @login_required
 def team_update(req,id):
@@ -377,7 +405,17 @@ def toggle_project_status(req,id):
 	team = TeamModel.objects.get(id = id)
 	team.project_status = 'CP' if team.project_status == 'IP' else 'IP'
 	team.save()
-	return redirect('manager:team')
-	
+	return redirect('manager:team')       
 
-    
+@login_required
+def update_team(req, id):
+  team = get_object_or_404(TeamModel, id=id)
+  if(req.method == 'POST'):
+    form = TeamForm(req.POST)
+    team.team_member = form.cleaned_data['team_member']
+    team.team_name = form.cleaned_data['team_name']
+    team.project_name = form.cleaned_data['project_name']
+    team.project_status  = form.cleaned_data['project_status']
+    team.skills = form.cleaned_data['skills']
+    team.save()
+  return redirect("manager:team")
