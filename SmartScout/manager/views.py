@@ -381,29 +381,11 @@ def create_team(req):
     return redirect("manager:team")
 
 def team_delete(req,id):
+    print("in " , id)
     team = TeamModel.objects.get(id = id)
     team.delete()
     return redirect('manager:team')
 
-@login_required
-def team_update(req,id):
-	team = TeamModel.objects.get(id=id)
-	
-  
-	if req.method == 'POST':
-		form = TeamForm(req.POST,instance=team)
-		print('got form to update')
-		if form.is_valid():
-			team.team_member = form.cleaned_data['team_member']
-			team.team_name = form.cleaned_data['team_name']
-			team.skills = form.cleaned_data['skills']
-			team.project_status = form.cleaned_data['project_status']
-			team.project_name = form.cleaned_data['project_name']
-			team.project_description = form.cleaned_data['project_description']
-			team.save()
-			return redirect('manager:team')
-	form = TeamForm()
-	return render(req,'manager/update_team.html',{'form':form})
 
 @login_required
 def toggle_project_status(req,id):
@@ -413,7 +395,8 @@ def toggle_project_status(req,id):
 	return redirect('manager:team')       
 
 @login_required
-def update_team(req, id):
+def update_team(req):
+  id = req.GET.get('id')
   team = get_object_or_404(TeamModel, id=id)
   if(req.method == 'POST'):
     project_name = req.POST.get('project_name')

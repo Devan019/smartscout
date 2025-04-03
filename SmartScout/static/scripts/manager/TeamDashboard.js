@@ -269,3 +269,14 @@ function addSkill(skill, idx, isadd) {
     autoSuggestContainers[idx].classList.add('hidden');
   }
 }
+
+function confirmDelete(id, deleteUrl) {
+  if(confirm("Confirm to delete.")) {
+      window.location.href = deleteUrl.replace('0', id);
+  }
+}
+
+
+function toggleTeamStatus(id, toggleUrl) {
+  window.location.href = toggleUrl.replace('0', id);
+}
