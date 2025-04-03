@@ -383,14 +383,25 @@ def create_team(req):
     return redirect("manager:team")
 
 @login_required
-def update_team(req, id):
+def update_team(req):
+  id = req.GET.get('id')
+  print(id)
   team = get_object_or_404(TeamModel, id=id)
   if(req.method == 'POST'):
-    form = TeamForm(req.POST)
-    team.team_member = form.cleaned_data['team_member']
-    team.team_name = form.cleaned_data['team_name']
-    team.project_name = form.cleaned_data['project_name']
-    team.project_status  = form.cleaned_data['project_status']
-    team.skills = form.cleaned_data['skills']
+    project_name = req.POST.get('project_name')
+    description = req.POST.get('project_description')
+    team_name = req.POST.get('team_name')
+    member_emails = req.POST.getlist('members')
+    skills = req.POST.get('skills', '').split(',')
+    members = EmployeeModel.objects.filter(profile__email__in=member_emails)
+    skills = req.POST.get('skills', '').split(',')
+
+    team.team_member.set(members)
+    team.team_name = team_name
+    team.project_name = project_name
+    team.project_description  = description
+    team.skills = skills
+    
     team.save()
+    # print(skills)
   return redirect("manager:team")
