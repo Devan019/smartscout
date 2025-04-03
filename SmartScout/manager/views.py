@@ -381,6 +381,12 @@ def create_team(req):
     return redirect("manager:team")
 
 @login_required
+def team_delete(req,id):
+    team = TeamModel.objects.get(id = id)
+    team.delete()
+    return redirect('manager:team')
+
+@login_required
 def team_update(req,id):
 	team = TeamModel.objects.get(id=id)
 	
