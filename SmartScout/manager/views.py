@@ -6,9 +6,9 @@ from django.shortcuts import get_object_or_404, redirect, render
 from employee.models import CandidateApplicationModel, Profile
 from manager.accepted import get_acceptance_email
 from manager.rejection import get_rejection_email
-from .models import EmployeeModel, RecruitmentModel, Status
+from .models import EmployeeModel, RecruitmentModel, Status, TeamModel
 from myadmin.models import Manager
-from .forms import EmployeeForm, RecruitmentForm
+from .forms import EmployeeForm, RecruitmentForm, TeamForm
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 # Create your views here.
@@ -311,8 +311,6 @@ def create_employee(req):
             # If form is invalid
         return redirect("manager:manager_dashboard")
 
-
-
 @login_required
 def update_employee(request):
   id=request.GET.get('id')
@@ -341,4 +339,44 @@ def delete_employee(request):
 
 @login_required
 def team_management(req):
-   return render(req, "manager/TeamDashboard.html")
+	teams = TeamModel.objects.all()
+	return render(req, "manager/TeamDashboard.html",{'teams	':teams})
+ 
+@login_required
+def team_delete(req,id):
+	try:
+		team = TeamModel.objects.get(id=id)
+	except TeamModel.DoesNotExist:
+		team = None  
+	
+	team.delete()
+	return redirect('manager:team')
+
+
+def team_update(req,id):
+	team = TeamModel.objects.get(id=id)
+	
+  
+	if req.method == 'POST':
+		form = TeamForm(req.POST,instance=team)
+		print('got form to update')
+		if form.is_valid():
+			team.team_member = form.cleaned_data['team_member']
+			team.team_name = form.cleaned_data['team_name']
+			team.skills = form.cleaned_data['skills']
+			team.project_status = form.cleaned_data['project_status']
+			team.project_name = form.cleaned_data['project_name']
+			team.project_description = form.cleaned_data['project_description']
+			team.save()
+			return redirect('manager:team')
+	form = TeamForm()
+	return render(req,'manager/update_team.html',{'form':form})
+
+def toggle_project_status(req,id):
+	team = TeamModel.objects.get(id = id)
+	team.project_status = 'CP' if team.project_status == 'IP' else 'IP'
+	team.save()
+	return redirect('manager:team')
+	
+
+    

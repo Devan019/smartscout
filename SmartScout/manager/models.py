@@ -62,6 +62,7 @@ class TeamModel(models.Model):
     team_member = models.ManyToManyField('EmployeeModel', related_name="team_member")
     team_name = models.CharField(max_length=100, null=True, blank=True)
     project_name = models.CharField(max_length=100, null=True, blank=True)
+    project_description = models.TextField(blank=False, null=False,default='Give description of the project...')
     skills = models.JSONField(default=list)
     project_status = models.CharField(max_length=2, choices=STATUS_CHOICES, default='IP')
     created_at = models.DateTimeField(auto_now_add=True)
