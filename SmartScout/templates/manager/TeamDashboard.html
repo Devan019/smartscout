@@ -1,5 +1,5 @@
 {% extends 'index.html' %}
-
+{% load static %}
 {% block title %}
   Team Management
 {% endblock %}
@@ -51,7 +51,7 @@
         <!-- Teams Grid -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {% for team in teams %}
-            <div class="bg-gray-800 rounded-xl overflow-hidden shadow-lg border-l-4 border-{{ team.color }}-500 transform transition-all hover:scale-[1.02]">
+            <div class="bg-gray-800 rounded-xl overflow-hidden shadow-lg border-l-4 border-blue-600 transform transition-all hover:scale-[1.02]">
               <div class="p-6">
                 <div class="flex justify-between items-start mb-4">
                   <div>
@@ -62,19 +62,25 @@
                     {% if team.status == 'Active' %}
                       
                       
+                      
                       bg-green-900 text-green-300
+
 
 
                     {% elif team.status == 'In Progress' %}
                       
                       
+                      
                       bg-yellow-900 text-yellow-300
+
 
 
                     {% else %}
                       
                       
+                      
                       bg-gray-700 text-gray-300
+
 
 
                     {% endif %} 
@@ -161,29 +167,38 @@
             </button>
           </div>
 
-          <form>
+          <form id="teamForm" method="post" action="{% url 'manager:create_team' %}">
+            {% csrf_token %}
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
               <!-- Two column layout -->
               <div>
                 <div class="mb-4">
                   <label class="block text-gray-300 text-sm mb-2" for="projectName">Project Name</label>
-                  <input type="text" id="projectName" class="w-full bg-gray-700 border border-gray-600 rounded-lg py-2 px-4 text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                  <input name="project_name" type="text" id="projectName" class="w-full bg-gray-700 border border-gray-600 rounded-lg py-2 px-4 text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                </div>
+
+                <div class="mb-4">
+                  <label class="block text-gray-300 text-sm mb-2" for="projectDesc">Project description</label>
+                  <input name="project_description" type="text" id="projectDesc" class="w-full bg-gray-700 border border-gray-600 rounded-lg py-2 px-4 text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500" />
                 </div>
 
                 <div class="mb-4">
                   <label class="block text-gray-300 text-sm mb-2" for="teamName">Team Name</label>
-                  <input type="text" id="teamName" class="w-full bg-gray-700 border border-gray-600 rounded-lg py-2 px-4 text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                  <input name="team_name" type="text" id="teamName" class="w-full bg-gray-700 border border-gray-600 rounded-lg py-2 px-4 text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500" />
                 </div>
 
-                <div class="mb-6">
+                <div class="mb-6 relative">
                   <label class="block text-gray-300 text-sm mb-2">Required Skills</label>
                   <div class="flex flex-wrap gap-2">
-                    <input type="text" id="skillsInput" class="flex-1 bg-gray-700 border border-gray-600 rounded-lg py-2 px-4 text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Add skills..." />
+                    <input type="text" id="skillInput" class="flex-1 bg-gray-700 border border-gray-600 rounded-lg py-2 px-4 text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Add skills..." />
                     <button type="button" id="addSkill" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg">Add</button>
                   </div>
                   <div id="skillsContainer" class="flex flex-wrap gap-2 mt-2">
                     <!-- Skills will be added here -->
                   </div>
+                  <div id="autoSuggestContainer" class="absolute left-0 mt-2 w-full max-h-40 overflow-y-auto bg-gray-800 text-white border border-gray-600 rounded-md shadow-lg hidden z-10"></div>
+
+                  <input type="hidden" name="skills" id="skills" />
                 </div>
               </div>
 
@@ -191,7 +206,7 @@
                 <div class="mb-4">
                   <label class="block text-gray-300 text-sm mb-2">Search Team Members</label>
                   <div class="relative mb-2">
-                    <input type="text" id="memberSearch" placeholder="Search employees..." class="w-full bg-gray-700 border border-gray-600 rounded-lg py-2 pl-10 pr-4 text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                    <input name="team_member" type="text" id="memberSearch" placeholder="Search employees..." class="w-full bg-gray-700 border border-gray-600 rounded-lg py-2 pl-10 pr-4 text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500" />
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400 absolute left-3 top-2.5" viewBox="0 0 20 20" fill="currentColor">
                       <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
                     </svg>
@@ -209,11 +224,7 @@
                             {% if employee.profile and employee.profile.profile_pic and employee.profile.profile_pic.url %}
                               <img src="{{ employee.profile.profile_pic.url }}" class="w-8 h-8 rounded-full mr-3" alt="{{ employee.name }}" />
                             {% else %}
-                              
-                                <div class="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center text-white font-medium text-xs mr-3">
-                                  {{employee.profile.name|first|upper}}
-                                </div>
-                              
+                              <div class="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center text-white font-medium text-xs mr-3">{{ employee.profile.name|first|upper }}</div>
                             {% endif %}
                             <div>
                               <span class="block font-medium">{{ employee.name }}</span>
@@ -230,6 +241,7 @@
                     {% endfor %}
                   </div>
                 </div>
+                <input type="hidden" name="skills" id="skillsHiddenInput">
               </div>
             </div>
 
@@ -271,7 +283,7 @@
                 <div class="mb-6">
                   <label class="block text-gray-300 text-sm mb-2">Required Skills</label>
                   <div class="flex flex-wrap gap-2">
-                    <input type="text" id="editSkillsInput" class="flex-1 bg-gray-700 border border-gray-600 rounded-lg py-2 px-4 text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Add skills..." />
+                    <input type="text" id="editskillInput" class="flex-1 bg-gray-700 border border-gray-600 rounded-lg py-2 px-4 text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Add skills..." />
                     <button type="button" id="addEditSkill" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg">Add</button>
                   </div>
                   <div id="editSkillsContainer" class="flex flex-wrap gap-2 mt-2">
@@ -366,24 +378,24 @@
       
       // Skills functionality (for both modals)
       function setupSkills(inputId, addBtnId, containerId) {
-        const skillsInput = document.getElementById(inputId)
+        const skillInput = document.getElementById(inputId)
         const addSkill = document.getElementById(addBtnId)
         const skillsContainer = document.getElementById(containerId)
       
         addSkill.addEventListener('click', () => {
-          if (skillsInput.value.trim() !== '') {
+          if (skillInput.value.trim() !== '') {
             const skill = document.createElement('span')
             skill.className = 'bg-gray-700 text-blue-300 px-2 py-1 rounded text-xs flex items-center'
             skill.innerHTML = `
-                          ${skillsInput.value.trim()}
-                          <button class="ml-1 text-gray-400 hover:text-white">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" viewBox="0 0 20 20" fill="currentColor">
-                              <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
-                            </svg>
-                          </button>
-                        `
+                                ${skillInput.value.trim()}
+                                <button class="ml-1 text-gray-400 hover:text-white">
+                                  <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                  </svg>
+                                </button>
+                              `
             skillsContainer.appendChild(skill)
-            skillsInput.value = ''
+            skillInput.value = ''
       
             // Add remove functionality
             skill.querySelector('button').addEventListener('click', () => {
@@ -392,7 +404,7 @@
           }
         })
       
-        skillsInput.addEventListener('keypress', (e) => {
+        skillInput.addEventListener('keypress', (e) => {
           if (e.key === 'Enter') {
             e.preventDefault()
             addSkill.click()
@@ -401,9 +413,19 @@
       }
       
       // Initialize skills for both modals
-      setupSkills('skillsInput', 'addSkill', 'skillsContainer')
-      setupSkills('editSkillsInput', 'addEditSkill', 'editSkillsContainer')
+      setupSkills('skillInput', 'addSkill', 'skillsContainer')
+      setupSkills('editskillInput', 'addEditSkill', 'editSkillsContainer')
       
+      document.getElementById('teamForm').addEventListener('submit', function(e) {
+        // Collect all selected skills
+        const skillElements = document.querySelectorAll('#skillsContainer span');
+        const skills = Array.from(skillElements).map(el => 
+          el.textContent.trim().replace(/\s+/g, ' ')
+        );
+        document.getElementById('skillsHiddenInput').value = skills.join(',');
+        
+        // The members will be automatically included via the checkboxes
+      });
       // Employee search functionality (for both modals)
       function setupEmployeeSearch(searchId, listId) {
         const searchInput = document.getElementById(searchId)
@@ -431,6 +453,7 @@
       setupEmployeeSearch('editMemberSearch', 'editEmployeeList')
     </script>
 
+    <script src="{% static 'scripts/manager/generateRecruitmentForm.js' %}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/110/three.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/vanta/0.5.24/vanta.net.min.js"></script>
     <script>

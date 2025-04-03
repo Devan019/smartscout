@@ -348,11 +348,39 @@ def team_management(req):
 
 @login_required
 def create_team(req):
-  if(req.method == 'POST'):
-     form = TeamForm(req.POST)
-     if(form.is_valid()):
-        form.save()
-  redirect("manager:team")
+    if req.method == 'POST':
+        try:
+           
+            project_name = req.POST.get('project_name')
+            description = req.POST.get('project_description')
+            team_name = req.POST.get('team_name')
+            member_emails = req.POST.getlist('members')
+            skills = req.POST.get('skills', '').split(',')
+            
+            new_team = TeamModel.objects.create(
+                project_name=project_name,
+                project_description=description,
+                team_name=team_name,
+                
+            )
+            
+            members = EmployeeModel.objects.filter(profile__email__in=member_emails)
+            new_team.team_member.set(members)
+            
+            
+            skills = req.POST.get('skills', '').split(',')
+            print(skills)
+            new_team.skills = skills
+            
+            new_team.save()
+
+
+            return redirect("manager:team")
+            
+        except Exception as e:
+            return redirect("manager:team")
+    
+    return redirect("manager:team")
 
 @login_required
 def update_team(req, id):
@@ -365,4 +393,4 @@ def update_team(req, id):
     team.project_status  = form.cleaned_data['project_status']
     team.skills = form.cleaned_data['skills']
     team.save()
-  redirect("manager:team")
+  return redirect("manager:team")
