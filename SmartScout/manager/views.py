@@ -311,8 +311,6 @@ def create_employee(req):
             # If form is invalid
         return redirect("manager:manager_dashboard")
 
-
-
 @login_required
 def update_employee(request):
   id=request.GET.get('id')

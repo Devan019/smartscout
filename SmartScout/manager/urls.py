@@ -41,4 +41,5 @@ urlpatterns = [
     path('team/',views.team_management, name="team"),
     path('team/create',views.create_team, name="create_team"),
     path('team/update/<int:id>',views.update_team, name="updated_team"),
+    path('team/delete/<int:id>/',views.team_delete,name='team_delete'),
 ]
