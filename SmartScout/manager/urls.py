@@ -42,7 +42,7 @@ urlpatterns = [
     path('team/create/',views.create_team, name="create_team"),
     path('team/update/',views.update_team, name="updated_team"),
     path('team/create',views.create_team, name="create_team"),
-    path('team/update/<int:id>',views.update_team, name="updated_team"),
+    path('team/update/<int:id>/',views.team_update, name="team_update"),
     path('team/delete/<int:id>/',views.team_delete,name='team_delete'),
     path('team/project_toggle/<int:id>/',views.toggle_project_status,name='toggle_project_status'),
 ]
