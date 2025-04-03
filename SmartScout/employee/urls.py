@@ -17,7 +17,7 @@ Including another URLconf
 """
 from django.urls import path
 
-from .views import applyForJob, getForm, getJobs, home, updateProfile, upload_resume
+from .views import applyForJob, getForm, getJobs, home, updateProfile, upload_resume, showEmployee
 
 
 
@@ -30,5 +30,5 @@ urlpatterns = [
     path('update/<int:id>/', updateProfile, name="updateProfile"),
     path("scanpdf/" ,upload_resume, name="upload_resume"),
     path("applyJob/<int:id>/",applyForJob,name="applyJob"),
-
+    path("employee/",showEmployee,name="employee"),
 ]

@@ -2,7 +2,7 @@ from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib.auth.decorators import login_required
 from myauth.models import CustomUser
-from manager.models import RecruitmentModel
+from manager.models import EmployeeModel, RecruitmentModel
 from .models import CandidateApplicationModel, Profile
 from .forms import ProfileForm
 from manager.models import RecruitmentModel
@@ -126,4 +126,16 @@ def applyForJob(req,id):
     print("done bro")
     return redirect("employee:jobs")
 
+@login_required
+def showEmployee(req):
+    user = req.user
+    profile = get_object_or_404(Profile, email= user.email)
+    employee = get_object_or_404(EmployeeModel, profile=profile)
+    manager = employee.manager
+    
+    return render(req,"employee/EmployeeProfile.html",{
+        'manager' : manager,
+        'profile': profile,
+        'employee' : employee
+    })
 

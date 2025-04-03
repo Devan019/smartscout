@@ -338,8 +338,3 @@ def delete_employee(request):
     if request.method == 'POST':
         employee.delete()
     return redirect('manager:manager_dashboard')
-
-@login_required    
-def get_employee(req):
-  emp_id = req.POST.id
-  return get_object_or_404(EmployeeModel,id=emp_id)

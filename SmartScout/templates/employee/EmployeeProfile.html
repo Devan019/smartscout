@@ -1,0 +1,142 @@
+{% extends 'index.html' %}
+
+{% block title %}
+  Employee Profile
+{% endblock %}
+
+{% block content %}
+  <div class="bg-gray-900 main text-gray-200">
+    {% include 'employee/nav.html' %}
+
+    <div class="container mx-auto px-4 py-8 min-h-screen">
+      {% if employee %}
+        <!-- Show message if employee is not shortlisted -->
+
+        <!-- Show profile if employee is shortlisted -->
+        <div class="max-w-4xl mx-auto">
+          <!-- Header -->
+          <div class="flex justify-between items-center mb-8">
+            <h1 class="text-3xl font-bold text-white">Employee Profile</h1>
+            <span class="bg-green-600 text-white px-3 py-1 rounded-full text-sm font-medium">Shortlisted</span>
+          </div>
+
+          <!-- Profile Card -->
+          <div class="bg-gray-800 rounded-lg shadow-lg overflow-hidden mb-8">
+            <!-- Profile Header -->
+            <div class="bg-gray-700 px-6 py-4 border-b border-gray-600">
+              <div class="flex items-center">
+                <div class="h-16 w-16 rounded-full bg-gray-600 flex items-center justify-center text-2xl font-bold">{{ profile.name.0|upper }}</div>
+                <div class="ml-4">
+                  <h2 class="text-xl font-bold text-white">{{ employee.name }}</h2>
+                  <p class="text-gray-300">{{ employee.role }}</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Profile Details -->
+            <div class="p-6">
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Employee Details -->
+                <div>
+                  <h3 class="text-lg font-semibold text-white mb-4 border-b border-gray-700 pb-2">Personal Information</h3>
+                  <div class="space-y-3">
+                    <div>
+                      <p class="text-gray-400 text-sm">Email</p>
+                      <p class="text-white">{{ profile.email }}</p>
+                    </div>
+                    <div>
+                      <p class="text-gray-400 text-sm">Contact Number</p>
+                      <p class="text-white">{{ profile.phone }}</p>
+                    </div>
+                    <div>
+                      <p class="text-gray-400 text-sm">Employee Type</p>
+                      <p class="text-white capitalize">{{ employee.employee_type }}</p>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Professional Details -->
+                <div>
+                  <h3 class="text-lg font-semibold text-white mb-4 border-b border-gray-700 pb-2">Professional Information</h3>
+                  <div class="space-y-3">
+                    <div>
+                      <p class="text-gray-400 text-sm">Experience</p>
+                      <p class="text-white">{{ employee.experience }} years</p>
+                    </div>
+                    <div>
+                      <p class="text-gray-400 text-sm">Salary</p>
+                      <p class="text-white">{{ employee.salary_lpa }} LPA</p>
+                    </div>
+                    <div>
+                      <p class="text-gray-400 text-sm">Role</p>
+                      <p class="text-white capitalize">{{ employee.role }}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Manager's Card -->
+          <div class="bg-gray-800 rounded-lg shadow-lg overflow-hidden">
+            <div class="bg-gray-700 px-6 py-4 border-b border-gray-600">
+              <h3 class="text-lg font-semibold text-white">Manager Information</h3>
+            </div>
+            <div class="p-6">
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <div class="flex items-center mb-4">
+                    <div class="h-12 w-12 rounded-full bg-gray-600 flex items-center justify-center text-xl font-bold">{{ manager.name.0|upper }}</div>
+                    <div class="ml-3">
+                      <h4 class="font-medium text-white">{{ manager.name }}</h4>
+                      <p class="text-gray-300 text-sm">Manager</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="space-y-3">
+                  <div>
+                    <p class="text-gray-400 text-sm">Email</p>
+                    <p class="text-white">{{ manager.emailid }}</p>
+                  </div>
+                  <div>
+                    <p class="text-gray-400 text-sm">Contact Number</p>
+                    <p class="text-white">{{ manager.contact }}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      {% else %}
+        <div class="max-w-2xl mx-auto bg-gray-800 rounded-lg shadow-lg p-6 text-center">
+          <h2 class="text-2xl font-bold text-red-400 mb-4">Access Restricted</h2>
+          <p class="text-gray-300 mb-4">Your profile is not currently shortlisted for viewing.</p>
+          <p class="text-gray-400">Please contact HR or your manager if you believe this is an error.</p>
+        </div>
+      {% endif %}
+    </div>
+
+    <div class="z-[9] relative">
+      {% include 'include/footer.html' %}
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/110/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vanta/0.5.24/vanta.net.min.js"></script>
+    <script>
+      VANTA.NET({
+        el: '.main',
+        mouseControls: true,
+        touchControls: true,
+        gyroControls: false,
+        minHeight: 200.0,
+        minWidth: 200.0,
+        scale: 1.0,
+        scaleMobile: 1.0,
+        color: 0x3b82f6,
+        backgroundColor: 0x121212,
+        points: 20.0,
+        maxDistance: 24.0
+      })
+    </script>
+  </div>
+{% endblock %}
