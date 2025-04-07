@@ -4,13 +4,13 @@
       {
           "src" : "smartscout/wsgi.py",
           "use" : "@vercel/python",
-          "config" : { "maxLambdaSize" : "15mb" , "runtime": "python3.9" }
+          "config" : { "maxLambdaSize" : "15mb" }
 
       } ,
       {
           "src" : "build.sh",
           "use" : "@vercel/static-build",
-          "config" : { "distDir" : "smartscout/staticfiles_build" }
+          "config" : { "distDir" : "staticfiles_build" }
       }
   ],
   "routes" : [
