@@ -27,8 +27,8 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
-# DEBUG = False
-DEBUG = True
+DEBUG = False
+# DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
@@ -156,10 +156,10 @@ EMAIL_HOST_PASSWORD = os.getenv("MAIL_KEY")
 
 
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")  # For collectstatic
-STATICFILES_DIRS = [  # Dev mode me static files serve karne ke liye
-    os.path.join(BASE_DIR, "static"),  
-]
+STATICFILES_DIRS =[
+    os.path.join(BASE_DIR, "static")
+] 
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles_build' , 'static')
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
  
