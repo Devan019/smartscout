@@ -8,9 +8,8 @@ from manager.accepted import get_acceptance_email
 from manager.rejection import get_rejection_email
 from .models import EmployeeModel, RecruitmentModel, Status, TeamModel
 from myadmin.models import Manager
-from .forms import EmployeeForm, RecruitmentForm, TeamForm
+from .forms import EmployeeForm, RecruitmentForm
 from django.contrib.auth.decorators import login_required
-from django.db.models import Q
 # Create your views here.
 @login_required
 def home(req):

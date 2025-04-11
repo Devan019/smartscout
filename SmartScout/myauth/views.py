@@ -5,7 +5,6 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import authenticate,logout,login
 
 from .forms import UserForm,AuthForm
-import os
 # Create your views here.
 
 def new_register(req):

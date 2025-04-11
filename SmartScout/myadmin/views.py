@@ -7,8 +7,6 @@ from .forms import ManagerForm
 from django.shortcuts import get_object_or_404
 from .models import Manager, ManagerAuth
 import random
-from django.core.mail import send_mail
-from django.conf import settings
 from .messege import send_manager_email
 
 
