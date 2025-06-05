@@ -25,7 +25,7 @@ INSTALLED_APPS = [
     'employee',
     'myadmin',
     'tailwind',
-    'theme',
+    # 'theme',
     'myauth'
 ]
 
