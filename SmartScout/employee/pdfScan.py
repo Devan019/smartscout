@@ -4,13 +4,19 @@ import re
 import fitz
 from docx import Document
 
+
 def load_skills_from_json(json_file):
     with open(json_file, 'r') as file:
         data = json.load(file)
         return set(data.get("skills", []))  
 
-print("in ")
-skills_db = load_skills_from_json(os.getenv("AUTO_SCAN_PATH"))
+
+# Get the directory of the current file (main.py)
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+# Build the relative path to the JSON file
+skill_json_path = os.path.join(BASE_DIR, 'static', 'json', 'skill.json')
+skills_db = load_skills_from_json(skill_json_path)
 
 def extract_text_from_docx(docx_path):
     doc = Document(docx_path)
